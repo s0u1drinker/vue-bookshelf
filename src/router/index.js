@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import MainView from '../views/MainView.vue'
 
 const router = createRouter({
+  linkActiveClass: 'navigation__link_active',
+  linkExactActiveClass: '',
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
@@ -19,6 +21,11 @@ const router = createRouter({
       name: 'bookstore',
       component: () => import('../views/BookstoreView.vue'),
     },
+    {
+      path: '/:pathMatch(.*)*',
+      name: '404',
+      component: () => import('../views/404View.vue')
+    }
   ],
 })
 

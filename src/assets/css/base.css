@@ -9,4 +9,22 @@ body {
 
 main {
   flex: auto;
+  padding: var(--padding);
+}
+
+a:visited {
+  color: inherit;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+
+  li {
+    list-style: none;
+
+    & + li {
+      margin-top: 0.5rem;
+    }
+  }
 }

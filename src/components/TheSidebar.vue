@@ -1,6 +1,8 @@
 <script setup>
 // Components
 import Navigation from '@/components/TheNavigation.vue'
+import CurrentBooks from './CurrentBooks.vue';
+// Store
 import { useBooksStore } from '@/stores/booksStore.js'
 
 const booksStore = useBooksStore()
@@ -11,14 +13,17 @@ const booksStore = useBooksStore()
     <div class="sidebar__block">
       <Navigation />
     </div>
+    <div class="sidebar__block sidebar__block_grow">
+      <CurrentBooks />
+    </div>
     <div class="sidebar__block">
       <ul class="sidebar__read-stat">
         <li>Прочитано страниц сегодня: {{ booksStore.getTodayPagesRead }}</li>
-        <li>Прочитано книг в этом году: {{ booksStore.getBoosReadThisYearCount }}</li>
-        <li>Всего книг прочитано: {{ booksStore.getCompleteBooksCount }}</li>
+        <li>Прочитано книг в этом году: {{ booksStore.getBooksReadThisYearCount }}</li>
+        <li>Всего книг на полке: {{ booksStore.getBooksCount }}</li>
+        <li>Всего книг прочитано: {{ booksStore.getBooksCompleteCount }}</li>
       </ul>
     </div>
-    <div class="sidebar__block sidebar__now-info">Читаю/Слушаю</div>
   </aside>
 </template>
 
@@ -26,36 +31,16 @@ const booksStore = useBooksStore()
 .sidebar {
   background-color: var(--dark);
   color: var(--white);
+  display: flex;
+  flex-direction: column;
   width: 17rem;
 
   &__block {
-    padding: 1rem;
-  }
+    padding: var(--padding);
 
-  &__user {
-    &-name {
-      text-align: center;
-    }
-
-    &-avatar {
-      border-radius: 50%;
-      box-shadow: 0 0 0.5rem var(--shadow);
-      display: block;
-      margin: 1rem auto 0;
-      width: 70%;
-    }
-  }
-
-  &__read-stat {
-    margin: 0;
-    padding: 0;
-
-    li {
-      list-style: none;
-
-      & + li {
-        margin-top: 0.5rem;
-      }
+    &_grow {
+      flex: 1;
+      margin-top: 2rem;
     }
   }
 }

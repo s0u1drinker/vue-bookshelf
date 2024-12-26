@@ -1,23 +1,50 @@
 <script setup>
 import { RouterLink } from 'vue-router'
+
+const links = [
+  { to: '/', text: 'Главная' },
+  { to: '/bookshelf', text: 'Книжная полка' },
+  { to: '/bookstore', text: 'Книжный магазин' },
+]
 </script>
 
 <template>
-  <nav>
-    <RouterLink to="/">Главная</RouterLink>
-    <RouterLink to="/bookshelf">Книжная полка</RouterLink>
-    <RouterLink to="/bookstore">Книжный магазин</RouterLink>
+  <nav class="navigation">
+    <RouterLink
+      class="navigation__link"
+      v-for="(link, index) in links"
+      :to="link.to"
+      :key="index"
+    >{{ link.text }}</RouterLink>
   </nav>
 </template>
 
 <style scoped>
-nav {
-  a {
-    color: var(--white);
+.navigation {
+  display: flex;
+  flex-direction: column;
+}
+
+.navigation__link {
+  background-color: transparent;
+  color: var(--white);
+  display: block;
+  padding: .5rem;
+  text-align: center;
+  transition: color .3s, background-color .3s;
+
+  &:hover {
+    background-color: var(--white);
+    color: var(--dark);
+    text-decoration: none;
   }
 }
 
-a:visited {
-  color: inherit;
+.navigation__link_active {
+  background-color: var(--blue);
+  color: var(--dark);
+  pointer-events: none;
+  position: relative;
+  text-decoration: none;
 }
 </style>

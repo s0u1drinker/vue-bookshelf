@@ -28,12 +28,15 @@ export const useBooksStore = defineStore('books', {
     getTodayPagesRead(state) {
       return state.tempData.todayPagesRead
     },
-    getBoosReadThisYearCount(state) {
+    getBooksCount(state) {
+      return state.listOfBooks.length
+    },
+    getBooksReadThisYearCount(state) {
       return state.listOfBooks.filter(
         (item) => new Date(item.dateEnd).getFullYear() === new Date().getFullYear(),
       ).length
     },
-    getCompleteBooksCount(state) {
+    getBooksCompleteCount(state) {
       return state.listOfBooks.filter((item) => item.isComplete).length
     },
   },
