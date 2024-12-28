@@ -1,7 +1,7 @@
 <script setup>
 // Components
 import Navigation from '@/components/TheNavigation.vue'
-import CurrentBooks from './CurrentBooks.vue';
+import CurrentBooks from './CurrentBooks.vue'
 // Store
 import { useBooksStore } from '@/stores/booksStore.js'
 

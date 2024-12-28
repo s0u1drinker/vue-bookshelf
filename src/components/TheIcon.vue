@@ -1,0 +1,27 @@
+<script>
+import { defineAsyncComponent } from 'vue';
+
+export default {
+  props: {
+    name: {
+      type: String,
+      required: true,
+    },
+  },
+
+  computed: {
+    dynamicComponent() {
+      const name = this.name;
+
+      return defineAsyncComponent(() => import(`@/components/icons/Icon${name}.vue`));
+    },
+  },
+};
+</script>
+
+<template>
+  <component :is="dynamicComponent" />
+</template>
+
+<style scoped>
+</style>
