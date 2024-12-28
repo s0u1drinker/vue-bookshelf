@@ -61,8 +61,6 @@ const links = [
     }
   }
 
-  &-text {}
-
   &-icon {
     fill: var(--white);
     height: 24px;
