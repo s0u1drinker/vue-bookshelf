@@ -2,9 +2,6 @@ import { defineStore } from 'pinia'
 
 export const useBooksStore = defineStore('books', {
   state: () => ({
-    tempData: {
-      todayPagesRead: 0,
-    },
     listOfBooks: [
       {
         booksSerie: 'The Horus Heresy',
@@ -14,8 +11,8 @@ export const useBooksStore = defineStore('books', {
         pages: 480,
         audioDuration: 0,
         cover: '9785918783375.webp',
-        dateAdd: '2024-12-17T13:24:00.000Z',
-        dateStart: '2024-12-21T21:42:32.000Z',
+        dateAdd: '2024-12-17T13:24:00+0300',
+        dateStart: '2024-12-21T21:42:32+0300',
         dateEnd: '',
         isOnReading: true,
         pagesRead: 36,
@@ -31,7 +28,7 @@ export const useBooksStore = defineStore('books', {
         pages: 320,
         audioDuration: 0,
         cover: '9785040939077.webp',
-        dateAdd: '2024-12-19T19:12:21.000Z',
+        dateAdd: '2024-12-19T19:12:21+0300',
         dateStart: '',
         dateEnd: '',
         isOnReading: false,
@@ -48,14 +45,14 @@ export const useBooksStore = defineStore('books', {
         pages: 208,
         audioDuration: 337,
         cover: '9781800262768.webp',
-        dateAdd: '2025-01-01T17:34:59.000Z',
-        dateStart: '2025-01-04T21:10:14.000Z',
-        dateEnd: '',
+        dateAdd: '2025-01-01T17:34:59+0300',
+        dateStart: '2025-01-04T21:10:14+0300',
+        dateEnd: '2025-01-09T21:52:38+0300',
         isOnReading: false,
         pagesRead: 0,
-        isOnAudition: true,
-        totalListened: 18,
-        isComplete: false,
+        isOnAudition: false,
+        totalListened: 337,
+        isComplete: true,
       },
       {
         booksSerie: 'The Horus Heresy. Primarchs',
@@ -65,14 +62,31 @@ export const useBooksStore = defineStore('books', {
         pages: 208,
         audioDuration: 331,
         cover: '9781800261389.webp',
-        dateAdd: '2025-01-01T17:33:48.000Z',
-        dateStart: '2025-01-01T20:38:14.000Z',
-        dateEnd: '2025-01-04T21:09:27.000Z',
+        dateAdd: '2025-01-01T17:33:48+0300',
+        dateStart: '2025-01-01T20:38:14+0300',
+        dateEnd: '2025-01-04T21:09:27+0300',
         isOnReading: false,
         pagesRead: 0,
         isOnAudition: false,
         totalListened: 331,
         isComplete: true,
+      },
+      {
+        booksSerie: 'The Horus Heresy. Primarchs',
+        title: 'Вулкан. Владыка Змиев',
+        author: 'Дэвид Аннендейл',
+        isbn: '9785918783863',
+        pages: 189,
+        audioDuration: 281,
+        cover: '9785918783863.webp',
+        dateAdd: '2025-01-01T17:38:14+0300',
+        dateStart: '2025-01-09T20:37:29+0300',
+        dateEnd: '',
+        isOnReading: false,
+        pagesRead: 0,
+        isOnAudition: true,
+        totalListened: 62,
+        isComplete: false,
       },
       /*
       {
@@ -96,9 +110,6 @@ export const useBooksStore = defineStore('books', {
     ],
   }),
   getters: {
-    getTodayPagesRead(state) {
-      return state.tempData.todayPagesRead
-    },
     getBooksCount(state) {
       return state.listOfBooks.length
     },
@@ -110,6 +121,9 @@ export const useBooksStore = defineStore('books', {
     getBooksCompleteCount(state) {
       return state.listOfBooks.filter((item) => item.isComplete).length
     },
+    getBooksOnReadingAndOnAudition(state) {
+      return state.listOfBooks.filter((item) => item.isOnReading || item.isOnAudition)
+    }
   },
   actions: {},
 })
