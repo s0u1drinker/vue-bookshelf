@@ -1,5 +1,5 @@
 :root {
-  --shadow: #000;
+  --black: #000;
   --dark: #293241;
   --orange: #ee6c4d;
   --light-blue: #e0fbfc;
@@ -8,4 +8,6 @@
   --white: #fff;
 
   --padding: 1rem;
+  --animation-options: 0.5s ease-out;
+  --shadow-options: 0 0 0.5rem;
 }

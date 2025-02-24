@@ -1,0 +1,10 @@
+/* Анимация при смене слайда*/
+.change-slide-enter-active,
+.change-slide-leave-active {
+  transition: opacity var(--animation-options);
+}
+
+.change-slide-enter-from,
+.change-slide-leave-to {
+  opacity: 0;
+}
