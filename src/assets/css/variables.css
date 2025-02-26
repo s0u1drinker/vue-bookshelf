@@ -7,7 +7,12 @@
   --dark-blue: #3d5a80;
   --white: #fff;
 
-  --padding: 1rem;
+  --button-blue: #007bff;
+
+  --ident: 1rem;
+  --ident-half: calc(var(--ident) / 2);
+  --ident-quarter: calc(var(--ident) / 4);
+
   --animation-options: 0.5s ease-out;
   --shadow-options: 0 0 0.5rem;
 }

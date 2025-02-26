@@ -83,7 +83,7 @@ onMounted(() => {
     color: var(--white);
     display: flex;
     margin: 0;
-    padding: var(--padding) 0;
+    padding: var(--ident) 0;
     transition: border var(--animation-options);
 
     &:hover {
@@ -98,7 +98,7 @@ onMounted(() => {
   &__slide {
     border: 1px solid var(--white);
     flex: 1;
-    margin: var(--padding);
+    margin: var(--ident);
     transition:
       box-shadow var(--animation-options),
       opacity var(--animation-options);

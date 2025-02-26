@@ -2,4 +2,5 @@
 
 @import './variables.css';
 @import './base.css';
+@import './extra-classes.css';
 @import './animations.css';

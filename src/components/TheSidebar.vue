@@ -3,10 +3,8 @@
 import Navigation from '@/components/TheNavigation.vue'
 import CurrentBooks from './CurrentBooks.vue'
 // Store
-import { useBooksStore } from '@/stores/booksStore.js'
 import { useProgressStore } from '@/stores/progressStore.js'
 
-const booksStore = useBooksStore()
 const progressStore = useProgressStore()
 </script>
 
@@ -22,9 +20,6 @@ const progressStore = useProgressStore()
       <ul class="sidebar__read-stat">
         <li>Прочитано страниц сегодня: {{ progressStore.getCountPagesReadToday }}</li>
         <li>Прослушано сегодня: {{ progressStore.getCountMinutesListenedToday }}</li>
-        <li>Прочитано книг в этом году: {{ booksStore.getBooksReadThisYearCount }}</li>
-        <li>Всего книг на полке: {{ booksStore.getBooksCount }}</li>
-        <li>Всего книг закончено: {{ booksStore.getBooksCompleteCount }}</li>
       </ul>
     </div>
   </aside>
@@ -39,7 +34,7 @@ const progressStore = useProgressStore()
   width: 17rem;
 
   &__block {
-    padding: var(--padding);
+    padding: var(--ident);
 
     &_grow {
       flex: 1;

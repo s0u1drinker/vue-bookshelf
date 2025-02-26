@@ -1,5 +1,23 @@
+html {
+  font-family:
+    Segoe UI,
+    Roboto,
+    Arial,
+    Helvetica,
+    sans-serif;
+}
+
 body {
   font-size: 16px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
 }
 
 #app {
@@ -9,17 +27,20 @@ body {
 
 main {
   flex: auto;
-  padding: var(--padding);
+  padding: var(--ident);
 }
 
 a:visited {
   color: inherit;
 }
 
-ul {
+ul,
+ol {
   margin: 0;
   padding: 0;
+}
 
+ul {
   li {
     list-style: none;
 
@@ -27,4 +48,8 @@ ul {
       margin-top: 0.5rem;
     }
   }
+}
+
+select {
+  padding: var(--ident-quarter);
 }

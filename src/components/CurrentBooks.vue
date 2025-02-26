@@ -72,7 +72,7 @@ const changeSlide = (idBookToShow) => {
 </script>
 
 <template>
-  <div class="current-books">
+  <div class="current-books" v-show="currentBooks.length">
     <ImageSlider :slides="currentBooksCovers" @change-slide="changeSlide" />
     <transition name="change-slide" mode="out-in">
       <div class="current-books__book-info-wrapper" :key="bookOnSlideInfo.isbn">
@@ -96,12 +96,11 @@ const changeSlide = (idBookToShow) => {
 <style scoped>
 .current-books {
   --icon-size: 2rem;
-  --padding-half: calc(var(--padding) / 2);
 
   &__status-icon {
     background-color: var(--dark-blue);
     grid-area: icon;
-    padding: var(--padding-half);
+    padding: var(--ident-half);
     height: var(--icon-size);
     width: var(--icon-size);
   }
@@ -117,7 +116,7 @@ const changeSlide = (idBookToShow) => {
       flex: 1;
       flex-direction: column;
       justify-content: stretch;
-      padding-left: var(--padding-half);
+      padding-left: var(--ident-half);
     }
 
     &-author {
@@ -127,7 +126,8 @@ const changeSlide = (idBookToShow) => {
 
     &-progress {
       border: 1px solid var(--white);
-      margin-top: var(--padding);
+      margin-top: var(--ident);
+      padding: var(--ident-quarter) 0;
       text-align: center;
       width: 100%;
     }
