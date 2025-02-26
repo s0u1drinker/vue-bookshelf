@@ -18,7 +18,7 @@ const progressStore = useProgressStore()
     </div>
     <div class="sidebar__block">
       <ul class="sidebar__read-stat">
-        <li>Прочитано страниц сегодня: {{ progressStore.getCountPagesReadToday }}</li>
+        <li>Прочитано сегодня: {{ progressStore.getCountPagesReadToday }}</li>
         <li>Прослушано сегодня: {{ progressStore.getCountMinutesListenedToday }}</li>
       </ul>
     </div>
