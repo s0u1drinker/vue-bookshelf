@@ -7,6 +7,7 @@ const props = defineProps({
     required: true,
   },
 })
+// Динамически подгружаем компонент (иконку) по имени.
 const dynamicComponent = computed(() => {
   const name = props.name
 

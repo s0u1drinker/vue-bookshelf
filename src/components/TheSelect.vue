@@ -25,10 +25,10 @@ const props = defineProps({
   },
 })
 const emits = defineEmits(['update:modelValue'])
-
+// Для ref компонента.
 const select = ref(null)
+// Значение select.
 const selectValue = ref(null)
-
 /**
  * Обновляет модель в родителе при изменении значения select.
  * @param value String Значение
@@ -36,9 +36,7 @@ const selectValue = ref(null)
 const onChange = () => {
   emits('update:modelValue', selectValue.value)
 }
-/**
- * Смонтировано.
- */
+// Смонтировано.
 onMounted(() => {
   // Если в компонент был передан элемент для выбора по умолчанию.
   if (props.selectedElement) {

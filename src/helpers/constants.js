@@ -1,6 +1,4 @@
-/**
- * Список месяцев для компонента select.
- */
+// Список месяцев для компонента select.
 export const months = [
   { value: 0, label: 'Январь' },
   { value: 1, label: 'Февраль' },

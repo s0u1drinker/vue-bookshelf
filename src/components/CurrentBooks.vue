@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
+import { RouterLink } from 'vue-router'
 // Store
 import { useBooksStore } from '@/stores/booksStore.js'
 // Componnets
@@ -7,35 +8,17 @@ import ImageSlider from '@/components/ImageSlider.vue'
 import TheIcon from '@/components/TheIcon.vue'
 
 const booksStore = useBooksStore()
-/**
- * Список книг, которые имеют статус "Читаю" или "Слушаю".
- * @type Object
- */
+// Список книг, которые имеют статус "Читаю" или "Слушаю".
 const currentBooks = booksStore.getBooksOnReadingAndOnAudition
-/**
- * Список имён файлов с обложками книг.
- * @type Array
- */
+// Список имён файлов с обложками книг.
 const currentBooksCovers = currentBooks.map((item) => item.cover)
-/**
- * Информация о книге, которая в данный момент отображается на слайде.
- * @type Object
- */
+// Информация о книге, которая в данный момент отображается на слайде.
 let bookOnSlideInfo = ref({})
-/**
- * Наименование иконки для отображения статуса книги.
- * @type String
- */
+// Наименование иконки для отображения статуса книги.
 let iconName = ref('')
-/**
- * Прогресс в процентах.
- * @type Number
- */
+// Прогресс в процентах.
 let bookProgress = ref(0)
-/**
- * Вычисляемое значение цвета элемента, отображающего прогресс.
- * @type String
- */
+// Вычисляемое значение цвета элемента, отображающего прогресс.
 const progressColor = computed(() => {
   const percentToValue = Math.trunc((255 * bookProgress.value) / 100)
   const red = 255 - percentToValue
@@ -43,6 +26,10 @@ const progressColor = computed(() => {
   const textColor = bookProgress.value >= 75 ? 'color:var(--dark);' : ''
 
   return `background-color:rgb(${red},${green},0);${textColor}`
+})
+// Именованный маршрут для router-link
+const pathToBook = computed(() => {
+  return `/book/${bookOnSlideInfo.value.isbn}`
 })
 /**
  * Функция обновляет информцию о книге при изменении слайда.
@@ -52,7 +39,7 @@ const changeSlide = (idBookToShow) => {
   bookOnSlideInfo.value = currentBooks[idBookToShow]
 
   const status = bookOnSlideInfo.value.status
-
+  // На основе статуса определяем иконку и считаем прогресс.
   if (status === 'read') {
     iconName.value = 'BookOpen'
     bookProgress.value = (
@@ -75,7 +62,11 @@ const changeSlide = (idBookToShow) => {
   <div class="current-books" v-show="currentBooks.length">
     <ImageSlider :slides="currentBooksCovers" @change-slide="changeSlide" />
     <transition name="change-slide" mode="out-in">
-      <div class="current-books__book-info-wrapper" :key="bookOnSlideInfo.isbn">
+      <RouterLink
+        :to="pathToBook"
+        class="current-books__book-info-wrapper"
+        :key="bookOnSlideInfo.isbn"
+      >
         <TheIcon :name="iconName" class="current-books__status-icon" />
         <div class="current-books__book-info">
           <span class="current-books__book-author">{{ bookOnSlideInfo.author }}</span>
@@ -88,7 +79,7 @@ const changeSlide = (idBookToShow) => {
         >
           {{ `${bookProgress}%` }}
         </div>
-      </div>
+      </RouterLink>
     </transition>
   </div>
 </template>
@@ -107,6 +98,7 @@ const changeSlide = (idBookToShow) => {
 
   &__book {
     &-info-wrapper {
+      color: var(--white);
       display: flex;
       flex-wrap: wrap;
     }

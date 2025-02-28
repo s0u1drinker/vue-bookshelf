@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, computed } from 'vue'
 // Helper
 import { getCoverPath } from '@/helpers/functions'
 // Icon
@@ -12,10 +12,7 @@ const props = defineProps({
   },
 })
 const emits = defineEmits(['change-slide'])
-/**
- * Индекс текущего слайда.
- * @type Number
- */
+// Индекс текущего слайда.
 const slideIndexToShow = ref(-1)
 /**
  * Перемещение слайдера
@@ -31,17 +28,17 @@ const moveSlide = (direction) => {
     console.error('Wrong direction to move slider.')
   }
 }
-/**
- * Наблюдаем за изменением индекса текщего слайда.
- */
+// Наблюдаем за изменением индекса текщего слайда.
 watch(slideIndexToShow, (newValue, oldValue) => {
   if (newValue !== oldValue) {
     emits('change-slide', slideIndexToShow.value)
   }
 })
-/**
- * Смонтировано.
- */
+// Путь к картинке с обложкой книги.
+const bookCover = computed(() => {
+  return getCoverPath(props.slides[slideIndexToShow.value])
+})
+// Смонтировано.
 onMounted(() => {
   slideIndexToShow.value = 0
 })
@@ -52,14 +49,7 @@ onMounted(() => {
     <button class="slider__arrow" @click="moveSlide('-')">
       <TheIcon name="ChevronLeft" />
     </button>
-    <img
-      class="slider__slide"
-      :src="getCoverPath(item)"
-      alt=""
-      v-for="(item, index) in props.slides"
-      :key="index"
-      v-show="index === slideIndexToShow"
-    />
+    <img class="slider__slide" :src="bookCover" alt="" />
     <button class="slider__arrow" @click="moveSlide('+')">
       <TheIcon name="ChevronRight" />
     </button>

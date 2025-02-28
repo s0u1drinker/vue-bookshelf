@@ -9,9 +9,12 @@
 
   --button-blue: #007bff;
 
+  --link-color: var(--button-blue);
+
   --ident: 1rem;
   --ident-half: calc(var(--ident) / 2);
   --ident-quarter: calc(var(--ident) / 4);
+  --ident-double: calc(var(--ident) * 2);
 
   --animation-options: 0.5s ease-out;
   --shadow-options: 0 0 0.5rem;

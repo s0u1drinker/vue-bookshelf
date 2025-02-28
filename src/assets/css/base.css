@@ -30,8 +30,13 @@ main {
   padding: var(--ident);
 }
 
-a:visited {
-  color: inherit;
+a {
+  color: var(--link-color);
+  text-decoration: none;
+
+  &:visited {
+    color: var(--link-color);
+  }
 }
 
 ul,
@@ -44,6 +49,16 @@ ul {
   li {
     list-style: none;
 
+    & + li {
+      margin-top: 0.5rem;
+    }
+  }
+}
+
+ol {
+  padding-left: var(--ident);
+
+  li {
     & + li {
       margin-top: 0.5rem;
     }

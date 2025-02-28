@@ -205,16 +205,28 @@ export const useProgressStore = defineStore('progress', {
     ],
   }),
   getters: {
+    /**
+     * Возвращает информацию о прочитанных/прослушанных книгах сегодня.
+     * @returns {Array} Аактивность на сегодня.
+     */
     getTodayProgress(state) {
       return state.progressList.filter(
         (item) => prettyStringDate(item.dateStop) === prettyStringDate(Date.now()),
       )
     },
+    /**
+     * Количество прочитанных страниц сегодня.
+     * @returns {Number} Количество страниц.
+     */
     getCountPagesReadToday() {
       const arrayReadedToday = this.getTodayProgress.filter((item) => !item.isAudio)
 
       return arrayReadedToday.reduce((sum, progress) => sum + progress.count, 0)
     },
+    /**
+     * Количество прослушанных минут сегодня.
+     * @returns {Number} Количество минут.
+     */
     getCountMinutesListenedToday() {
       const arrayReadedToday = this.getTodayProgress.filter((item) => item.isAudio)
 

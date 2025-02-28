@@ -1,8 +1,47 @@
+.link {
+  border-bottom: 1px solid transparent;
+  transition: border var(--animation-options);
+
+  &:hover {
+    border-color: var(--orange);
+  }
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.italic {
+  font-style: italic;
+}
+
 .tooltip {
   border-bottom: 1px dashed var(--dark-blue);
   cursor: help;
 }
-/* Buttons */
+/* Отступы */
+.mt {
+  &_1 {
+    margin-top: var(--ident);
+  }
+}
+
+.ml {
+  &_half {
+    margin-left: var(--ident-half);
+  }
+  &_1 {
+    margin-left: var(--ident);
+  }
+  &_2 {
+    margin-left: var(--ident-double);
+  }
+}
+/* Кнопки */
 .button {
   background-color: var(--white);
   border: 1px solid var(--black);
