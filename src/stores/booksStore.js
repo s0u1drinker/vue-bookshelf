@@ -6,7 +6,7 @@ export const useBooksStore = defineStore('books', {
   state: () => ({
     listOfBooks: [
       {
-        booksSerie: 'The Horus Heresy',
+        bookSeries: 'The Horus Heresy',
         title: 'Старая Земля',
         author: 'Ник Кайм',
         isbn: '9785918783375',
@@ -25,7 +25,7 @@ export const useBooksStore = defineStore('books', {
         opinion: '',
       },
       {
-        booksSerie: 'Академия',
+        bookSeries: 'Академия',
         title: 'Академия',
         author: 'Айзек Азимов',
         isbn: '9785040939077',
@@ -44,7 +44,7 @@ export const useBooksStore = defineStore('books', {
         opinion: '',
       },
       {
-        booksSerie: 'The Horus Heresy. Primarchs',
+        bookSeries: 'The Horus Heresy. Primarchs',
         title: 'Сангвиний. Великий Ангел',
         author: 'Крис Райт',
         isbn: '9781800262768',
@@ -63,7 +63,7 @@ export const useBooksStore = defineStore('books', {
         opinion: '',
       },
       {
-        booksSerie: 'The Horus Heresy. Primarchs',
+        bookSeries: 'The Horus Heresy. Primarchs',
         title: 'Мортарион. Бледный Король',
         author: 'Дэвид Аннендейл',
         isbn: '9781800261389',
@@ -82,7 +82,7 @@ export const useBooksStore = defineStore('books', {
         opinion: '',
       },
       {
-        booksSerie: 'The Horus Heresy. Primarchs',
+        bookSeries: 'The Horus Heresy. Primarchs',
         title: 'Вулкан. Владыка Змиев',
         author: 'Дэвид Аннендейл',
         isbn: '9785918783863',
@@ -101,7 +101,7 @@ export const useBooksStore = defineStore('books', {
         opinion: '',
       },
       {
-        booksSerie: '',
+        bookSeries: '',
         title: 'Цивилизация статуса',
         author: 'Роберт Шекли',
         isbn: '9785389151222',
@@ -120,7 +120,7 @@ export const useBooksStore = defineStore('books', {
         opinion: '',
       },
       {
-        booksSerie: '',
+        bookSeries: '',
         title: 'Поселок',
         author: 'Кир Булычёв',
         isbn: '9785171665302',
@@ -139,7 +139,7 @@ export const useBooksStore = defineStore('books', {
         opinion: '',
       },
       {
-        booksSerie: 'Миры Марии Семёновой',
+        bookSeries: 'Миры Марии Семёновой',
         title: 'Лебединая дорога',
         author: 'Мария Семёнова',
         isbn: '9785389097209',
@@ -158,7 +158,7 @@ export const useBooksStore = defineStore('books', {
         opinion: '',
       },
       {
-        booksSerie: 'Миры Марии Семёновой',
+        bookSeries: 'Миры Марии Семёновой',
         title: 'Меч мертвых',
         author: 'Мария Семёнова, Андрей Константинов',
         isbn: '9785389079618',
@@ -177,7 +177,7 @@ export const useBooksStore = defineStore('books', {
         opinion: '',
       },
       {
-        booksSerie: 'The Horus Heresy',
+        bookSeries: 'The Horus Heresy',
         title: 'Первый Еретик',
         author: 'Аарон Дембски-Боуден',
         isbn: '9785918780381',
@@ -196,7 +196,7 @@ export const useBooksStore = defineStore('books', {
         opinion: '',
       },
       {
-        booksSerie: 'Warhammer 40000',
+        bookSeries: 'Warhammer 40000',
         title: 'Ловец Душ',
         author: 'Аарон Дембски-Боуден',
         isbn: '9785918780374',
@@ -215,7 +215,7 @@ export const useBooksStore = defineStore('books', {
         opinion: '',
       },
       {
-        booksSerie: 'The Horus Heresy',
+        bookSeries: 'The Horus Heresy',
         title: 'Рожденные в пламени',
         author: 'Ник Кайм',
         isbn: '9785918783931',
@@ -234,7 +234,7 @@ export const useBooksStore = defineStore('books', {
         opinion: '',
       },
       {
-        booksSerie: 'Forgotten Realms',
+        bookSeries: 'Forgotten Realms',
         title: 'Легенда о Темном Эльфе. Книга 1. Отступник. Изгнанник. Воин',
         author: 'Роберт А. Сальваторе',
         isbn: '9785918781012',
@@ -253,7 +253,7 @@ export const useBooksStore = defineStore('books', {
         opinion: '',
       },
       {
-        booksSerie: '',
+        bookSeries: '',
         title: 'Вся Шуттовская рать',
         author: 'Роберт Асприн, Питер Хек',
         isbn: '9785171518196',
@@ -272,7 +272,7 @@ export const useBooksStore = defineStore('books', {
         opinion: '',
       },
       {
-        booksSerie: '',
+        bookSeries: '',
         title: 'Айвенго',
         author: 'Вальтер Скотт',
         isbn: '9785907577503',
@@ -292,7 +292,7 @@ export const useBooksStore = defineStore('books', {
           'Рыцарские турниры, тамплиеры, дух средневековой Англии, персонажи - мой внутренний ребёнок в восторге!',
       },
       {
-        booksSerie: '',
+        bookSeries: '',
         title: '451 по Фаренгейту',
         author: 'Рэй Брэдбери',
         isbn: '9785042040863',
@@ -312,7 +312,7 @@ export const useBooksStore = defineStore('books', {
       },
       /*
       {
-        booksSerie: '',
+        bookSeries: '',
         title: '',
         author: '',
         isbn: '',
@@ -395,6 +395,17 @@ export const useBooksStore = defineStore('books', {
      */
     getBooksOnReadingAndOnAudition(state) {
       return state.listOfBooks.filter((item) => item.status)
+    },
+    /**
+     * Возвращает книги из хранилища.
+     * @param {Number} start Начальная позиция.
+     * @param {Number} limit Количество.
+     * @returns {Array} Список книг.
+     */
+    getBooks: (state) => {
+      return (start = 0, limit = null) => {
+        return limit ? state.listOfBooks.slice(start, limit) : state.listOfBooks.slice(start)
+      }
     },
   },
   actions: {},

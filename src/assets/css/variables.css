@@ -17,5 +17,6 @@
   --ident-double: calc(var(--ident) * 2);
 
   --animation-options: 0.5s ease-out;
+  --animation-options-fast: 0.25s ease-out;
   --shadow-options: 0 0 0.5rem;
 }

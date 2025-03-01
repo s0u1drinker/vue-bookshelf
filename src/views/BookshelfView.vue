@@ -1,9 +1,87 @@
 <script setup>
-// https://www.livelib.ru/find/books/%D0%9D%D0%B8%D0%BA+%D0%BA%D0%B0%D0%B9%D0%BC
+import { onMounted, ref } from 'vue'
+// Store
+import { useBooksStore } from '@/stores/booksStore'
+// Components
+import BookCard from '@/components/BookCard.vue'
+// Icon
+import TheIcon from '@/components/TheIcon.vue'
+
+const booksStore = useBooksStore()
+// Всего книг на полке.
+const booksCount = ref(0)
+// Счётчики прочитанных книг.
+const booksCompleteCount = ref([])
+// Список книг.
+const books = ref([])
+// Значения для запроса списка книг.
+const dataForLoad = ref({
+  start: 0,
+  end: 4,
+  count: 4,
+})
+
+// Смонтировано.
+onMounted(() => {
+  booksCount.value = booksStore.getBooksCount
+  booksCompleteCount.value = booksStore.getBooksCompleteCount()
+
+  loadMoreBooks()
+})
+const loadMoreBooks = () => {
+  if (books.value.length < booksCount.value) {
+    books.value = [...booksStore.getBooks(dataForLoad.value.start, dataForLoad.value.end)]
+    dataForLoad.value.end += dataForLoad.value.count
+  }
+}
 </script>
 
 <template>
-  <div>Книжная полка</div>
+  <h1>Книжная полка</h1>
+  <div class="bookshelf">
+    <div class="bookshelf__info">
+      <div class="bookshelf__info-wrapper">
+        <span class="bookshelf__info-item">Всего книг на полке: {{ booksCount }}</span>
+        <span class="bookshelf__info-item">Из них прочитано: {{ booksCompleteCount.all }}</span>
+        <span class="bookshelf__info-item">Показано книг: {{ books.length }}</span>
+      </div>
+      <button class="button button_blue"><TheIcon name="Plus" />Добавить книгу</button>
+    </div>
+    <div class="bookshelf__list">
+      <BookCard v-for="(book, index) in books" :key="index" :bookData="book" />
+    </div>
+    <button @click="loadMoreBooks">Загрузить ещё</button>
+  </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.bookshelf {
+  margin-top: var(--ident-double);
+
+  &__info {
+    align-items: center;
+    display: flex;
+
+    &-wrapper {
+      display: flex;
+      flex-direction: column;
+
+      & + button {
+        margin-left: var(--ident-double);
+      }
+    }
+
+    &-item {
+      & + & {
+        margin-top: var(--ident-quarter);
+      }
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ident);
+  }
+}
+</style>

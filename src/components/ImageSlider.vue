@@ -3,7 +3,7 @@ import { ref, watch, onMounted, computed } from 'vue'
 // Helper
 import { getCoverPath } from '@/helpers/functions'
 // Icon
-import TheIcon from './TheIcon.vue'
+import TheIcon from '@/components/TheIcon.vue'
 
 const props = defineProps({
   slides: {

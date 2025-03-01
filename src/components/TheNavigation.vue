@@ -1,7 +1,7 @@
 <script setup>
 import { RouterLink } from 'vue-router'
-// Icons
-import TheIcon from './TheIcon.vue'
+// Icon
+import TheIcon from '@/components/TheIcon.vue'
 
 const links = [
   { to: '/', text: 'Главная', icon: 'Statistic' },

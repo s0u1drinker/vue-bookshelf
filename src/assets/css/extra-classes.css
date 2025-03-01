@@ -48,6 +48,16 @@
   line-height: 1.5;
   margin: 0;
   padding: var(--ident-quarter) var(--ident);
+  transition:
+    color var(--animation-options-fast),
+    background-color var(--animation-options-fast),
+    border-color var(--animation-options-fast),
+    box-shadow var(--animation-options-fast);
+
+  &:hover {
+    cursor: pointer;
+    background-color: var(--light-blue);
+  }
 
   &_blue {
     background-color: var(--button-blue);
