@@ -3,9 +3,8 @@ import { onMounted, ref } from 'vue'
 // Store
 import { useBooksStore } from '@/stores/booksStore'
 // Components
+import TheButton from '@/components/TheButton.vue'
 import BookCard from '@/components/BookCard.vue'
-// Icon
-import TheIcon from '@/components/TheIcon.vue'
 
 const booksStore = useBooksStore()
 // Всего книг на полке.
@@ -45,7 +44,7 @@ const loadMoreBooks = () => {
         <span class="bookshelf__info-item">Из них прочитано: {{ booksCompleteCount.all }}</span>
         <span class="bookshelf__info-item">Показано книг: {{ books.length }}</span>
       </div>
-      <button class="button button_blue"><TheIcon name="Plus" />Добавить книгу</button>
+      <TheButton icon="Plus" text="Добавить книгу" color="blue" />
     </div>
     <div class="bookshelf__list">
       <BookCard v-for="(book, index) in books" :key="index" :bookData="book" />
