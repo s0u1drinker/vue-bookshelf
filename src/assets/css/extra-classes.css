@@ -41,35 +41,6 @@
     margin-left: var(--ident-double);
   }
 }
-/* Кнопки */
-.button {
-  background-color: var(--white);
-  border: 1px solid var(--black);
-  line-height: 1.5;
-  margin: 0;
-  padding: var(--ident-quarter) var(--ident);
-  transition:
-    color var(--animation-options-fast),
-    background-color var(--animation-options-fast),
-    border-color var(--animation-options-fast),
-    box-shadow var(--animation-options-fast);
-
-  &:hover {
-    cursor: pointer;
-    background-color: var(--light-blue);
-  }
-
-  &_blue {
-    background-color: var(--button-blue);
-    border-color: var(--button-blue);
-    color: var(--white);
-
-    &:hover {
-      background-color: var(--dark-blue);
-      border-color: var(--dark-blue);
-    }
-  }
-}
 /* Flexbox */
 .flex {
   display: flex;

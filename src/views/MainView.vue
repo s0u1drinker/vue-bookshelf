@@ -9,6 +9,7 @@ import { useRatingsStore } from '@/stores/ratingsStore'
 // Components
 import StatBlock from '@/components/StatBlock.vue'
 import TheSelect from '@/components/TheSelect.vue'
+import TheButton from '@/components/TheButton.vue'
 
 const booksStore = useBooksStore()
 const ratingsStore = useRatingsStore()
@@ -89,7 +90,7 @@ const showSelectedPeriodData = () => {
       v-model="userSelectedYear"
       :selectedElement="new Date().getFullYear()"
     />
-    <button class="button button_blue" @click="showSelectedPeriodData">Показать</button>
+    <TheButton text="Показать" color="blue" @click="showSelectedPeriodData" />
   </div>
   <div class="block_wrapper">
     <StatBlock :title="userBlockTitle">
