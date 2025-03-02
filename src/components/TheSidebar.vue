@@ -1,11 +1,18 @@
 <script setup>
+import { ref, onMounted } from 'vue'
 // Components
 import Navigation from '@/components/TheNavigation.vue'
-import CurrentBooks from './CurrentBooks.vue'
+import CurrentBooks from '@/components/CurrentBooks.vue'
 // Store
 import { useProgressStore } from '@/stores/progressStore.js'
 
 const progressStore = useProgressStore()
+// Статистика за текущий день.
+const statisticToday = ref({})
+
+onMounted(() => {
+  statisticToday.value = progressStore.getStatisticsByDate(new Date())
+})
 </script>
 
 <template>
@@ -18,8 +25,8 @@ const progressStore = useProgressStore()
     </div>
     <div class="sidebar__block">
       <ul class="sidebar__read-stat">
-        <li>Прочитано сегодня: {{ progressStore.getCountPagesReadToday }}</li>
-        <li>Прослушано сегодня: {{ progressStore.getCountMinutesListenedToday }}</li>
+        <li>Прочитано сегодня: {{ statisticToday.pages }}</li>
+        <li>Прослушано сегодня: {{ statisticToday.minutes }}</li>
       </ul>
     </div>
   </aside>
