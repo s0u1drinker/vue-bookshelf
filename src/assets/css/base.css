@@ -26,8 +26,8 @@ h6 {
 }
 
 main {
-  flex: auto;
   padding: var(--ident);
+  width: 100%;
 }
 
 a {

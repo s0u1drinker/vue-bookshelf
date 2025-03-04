@@ -16,8 +16,8 @@ const books = ref([])
 // Значения для запроса списка книг.
 const dataForLoad = ref({
   start: 0,
-  end: 4,
-  count: 4,
+  end: 6,
+  count: 6,
 })
 
 // Смонтировано.
@@ -49,17 +49,28 @@ const loadMoreBooks = () => {
     <div class="bookshelf__list">
       <BookCard v-for="(book, index) in books" :key="index" :bookData="book" />
     </div>
-    <button @click="loadMoreBooks">Загрузить ещё</button>
+    <TheButton
+      text="Загрузить ещё"
+      color="blue"
+      :outline="true"
+      @click="loadMoreBooks"
+      v-show="books.length < booksCount"
+    />
   </div>
 </template>
 
 <style scoped>
 .bookshelf {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ident-double);
   margin-top: var(--ident-double);
 
   &__info {
     align-items: center;
     display: flex;
+    width: 100%;
 
     &-wrapper {
       display: flex;

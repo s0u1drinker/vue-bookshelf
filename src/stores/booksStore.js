@@ -397,7 +397,7 @@ export const useBooksStore = defineStore('books', {
       return state.listOfBooks.filter((item) => item.status)
     },
     /**
-     * Возвращает книги из хранилища.
+     * Возвращает книги из хранилища с определённой позиции в определённом количестве.
      * @param {Number} start Начальная позиция.
      * @param {Number} limit Количество.
      * @returns {Array} Список книг.
@@ -405,6 +405,16 @@ export const useBooksStore = defineStore('books', {
     getBooks: (state) => {
       return (start = 0, limit = null) => {
         return limit ? state.listOfBooks.slice(start, limit) : state.listOfBooks.slice(start)
+      }
+    },
+    /**
+     * Возвращает информацию о книге по ISBN.
+     * @param {String} isbn ISBN книги.
+     * @returns {Object} Информация о книге.
+     */
+    getBookInfoByISBN: (state) => {
+      return (isbn) => {
+        return state.listOfBooks.filter((book) => book.isbn === isbn)
       }
     },
   },

@@ -1,5 +1,9 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+import { RouterLink } from 'vue-router'
+// Components
+import TheButton from '@/components/TheButton.vue'
+import TheMark from '@/components/TheMark.vue'
 // Helper
 import { getCoverPath } from '@/helpers/functions'
 
@@ -26,6 +30,47 @@ const props = defineProps({
 const bookCover = computed(() => {
   return getCoverPath(props.bookData.cover)
 })
+// Статус (прочитано/прослушано/в процессе) книги.
+const bookStatus = ref({
+  read: {
+    complete: false,
+    progress: false,
+    text: '',
+    color: '',
+  },
+  audio: {
+    complete: false,
+    progress: false,
+    text: '',
+    color: '',
+  },
+})
+// Смонитровано.
+onMounted(() => {
+  if (props.bookData.isComplete) {
+    if (props.bookData.pagesRead) {
+      bookStatus.value.read.complete = true
+      bookStatus.value.read.text = 'Прочитано'
+      bookStatus.value.read.color = 'green'
+    }
+    if (props.bookData.totalListened) {
+      bookStatus.value.audio.complete = true
+      bookStatus.value.audio.text = 'Прослушано'
+      bookStatus.value.audio.color = 'green'
+    }
+  } else if (props.bookData.status) {
+    if (props.bookData.status === 'read') {
+      bookStatus.value.read.progress = true
+      bookStatus.value.read.text = 'Читаю'
+      bookStatus.value.read.color = 'orange'
+    }
+    if (props.bookData.status === 'audio') {
+      bookStatus.value.audio.progress = true
+      bookStatus.value.audio.text = 'Слушаю'
+      bookStatus.value.audio.color = 'orange'
+    }
+  }
+})
 </script>
 
 <template>
@@ -33,41 +78,94 @@ const bookCover = computed(() => {
     <div class="book-card__content">
       <img :src="bookCover" alt="" class="book-card__cover" />
       <div class="book-card__info">
-        <div class="book-card__title">{{ bookData.title }}</div>
-        <div class="book-card__author">{{ bookData.author }}</div>
-        <div class="book-card__serie">{{ bookData.bookSeries }}</div>
+        <span class="book-card__title">{{ bookData.title }}</span>
+        <span class="book-card__author">{{ bookData.author }}</span>
+        <TheMark
+          :text="bookStatus.read.text"
+          icon="BookOpen"
+          :color="bookStatus.read.color"
+          v-if="bookStatus.read.complete || bookStatus.read.progress"
+        />
+        <TheMark
+          :text="bookStatus.audio.text"
+          icon="Headphones"
+          :color="bookStatus.audio.color"
+          v-if="bookStatus.audio.complete || bookStatus.audio.progress"
+        />
       </div>
     </div>
     <div class="book-card__content">
-      <div class="book-card__statuses">
-        <span class="book-card__complete"></span>
-        <span class="book-card__in-progress"></span>
-      </div>
       <div class="book-card__buttons">
-        <button>Послушать</button>
-        <button>Почитать</button>
+        <TheButton
+          color="blue"
+          icon="Plus"
+          :text="`${bookStatus.read.progress ? 'Страницы' : 'Минуты'}`"
+          v-if="bookStatus.read.progress || bookStatus.audio.progress"
+        />
+        <template v-else>
+          <TheButton color="blue" icon="BookOpen" text="Почитать" />
+          <TheButton color="red" icon="Headphones" text="Послушать" />
+        </template>
       </div>
+      <RouterLink :to="`/book/${bookData.isbn}`" class="link">Подробнее</RouterLink>
     </div>
   </div>
 </template>
 
 <style scoped>
 .book-card {
-  border: 1px solid var(--blue);
   box-sizing: border-box;
   display: flex;
-  flex-direction: column;
-  gap: var(--ident-half);
+  gap: var(--ident);
   padding: var(--ident);
-  width: 45%;
+  width: 32%;
+  transition: box-shadow var(--animation-options-fast);
+
+  &:hover {
+    box-shadow: var(--shadow-options) var(--dark);
+
+    & > .book-card__content:nth-child(2) {
+      opacity: 1;
+    }
+  }
 
   &__content {
     display: flex;
+    flex-direction: column;
     gap: var(--ident);
+    transition: opacity var(--animation-options-fast);
+    width: 50%;
+
+    &:nth-child(2) {
+      align-items: center;
+      opacity: 0;
+    }
   }
 
   &__cover {
-    width: calc(var(--ident) * 8);
+    width: 100%;
+  }
+
+  &__info {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    gap: var(--ident-half);
+  }
+
+  &__title {
+    font-weight: bold;
+  }
+
+  &__author {
+    font-style: italic;
+  }
+
+  &__buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ident);
+    flex: 1 1;
   }
 }
 </style>

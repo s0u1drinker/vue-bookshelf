@@ -8,6 +8,11 @@
   --white: #fff;
 
   --button-blue: #007bff;
+  --button-blue-hover: #0069d9;
+  --button-red: #dc3545;
+  --button-red-hover: #c82333;
+  --button-green: #28a745;
+  --button-green-hover: #218838;
 
   --link-color: var(--button-blue);
 

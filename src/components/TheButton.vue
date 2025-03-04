@@ -47,6 +47,7 @@ const extraClass = computed(() => {
   border: 1px solid var(--black);
   display: inline-flex;
   gap: var(--ident-half);
+  justify-content: center;
   margin: 0;
   padding: var(--ident-half);
   transition:
@@ -85,8 +86,19 @@ const extraClass = computed(() => {
     color: var(--white);
 
     &:hover {
-      background-color: var(--dark-blue);
-      border-color: var(--dark-blue);
+      background-color: var(--button-blue-hover);
+      border-color: var(--button-blue-hover);
+    }
+  }
+
+  &_red {
+    background-color: var(--button-red);
+    border-color: var(--button-red);
+    color: var(--white);
+
+    &:hover {
+      background-color: var(--button-red-hover);
+      border-color: var(--button-red-hover);
     }
   }
 }
