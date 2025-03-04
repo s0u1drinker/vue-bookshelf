@@ -20,6 +20,10 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  link: {
+    type: String,
+    default: '',
+  },
 })
 const extraClass = computed(() => {
   let className = ''
@@ -33,11 +37,16 @@ const extraClass = computed(() => {
 </script>
 
 <template>
-  <button class="button" :class="extraClass">
+  <component
+    :is="link ? 'RouterLink' : 'button'"
+    class="button"
+    :class="extraClass"
+    :to="link || null"
+  >
     <TheIcon :name="props.icon" v-if="props.icon" />
     <span v-if="props.text">{{ props.text }}</span>
     <span v-if="!props.icon && !props.text">Кто-то забыл передать кнопке текст или икноку? =)</span>
-  </button>
+  </component>
 </template>
 
 <style scoped>

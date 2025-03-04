@@ -44,7 +44,7 @@ const loadMoreBooks = () => {
         <span class="bookshelf__info-item">Из них прочитано: {{ booksCompleteCount.all }}</span>
         <span class="bookshelf__info-item">Показано книг: {{ books.length }}</span>
       </div>
-      <TheButton icon="Plus" text="Добавить книгу" color="blue" />
+      <TheButton icon="Plus" text="Добавить книгу" color="blue" link="/bookstore" />
     </div>
     <div class="bookshelf__list">
       <BookCard v-for="(book, index) in books" :key="index" :bookData="book" />
@@ -76,7 +76,7 @@ const loadMoreBooks = () => {
       display: flex;
       flex-direction: column;
 
-      & + button {
+      & + .button {
         margin-left: var(--ident-double);
       }
     }
