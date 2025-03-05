@@ -22,12 +22,14 @@ h6 {
 
 #app {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 
 main {
+  overflow: auto;
   padding: var(--ident);
-  width: 100%;
+  flex: 9;
 }
 
 a {

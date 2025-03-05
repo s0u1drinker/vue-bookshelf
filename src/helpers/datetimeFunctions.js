@@ -26,17 +26,10 @@ export function validDateInRequestToStore(year, month) {
 
   return !errorFlag
 }
-/**
- * Для отображения красивой даты: добавляет "0", если переданное число меньше 10.
- * @param {Number} num Число
- * @returns {String} 1 => 01
- */
-export function prettyNumberForDate(num) {
-  return num < 10 ? `0${num}` : String(num)
-}
 
 /**
  * Возвращает красивую дату.
+ * P.S.: Да-да, я в курсе, что можно было обойтись функцией .toLocaleString(), но доверия пользовательскому браузеру у меня нет.
  * @param {Date} dt Дата
  * @param {Boolean} withTime Если необходимо отобразить время
  * @returns {String} Дата (+ время) в красивом формате: 01.01.2025 16:10
@@ -46,11 +39,34 @@ export function prettyStringDate(dt, withTime = false) {
     dt = new Date(dt)
   }
 
-  let datetime = `${prettyNumberForDate(dt.getDate())}.${prettyNumberForDate(dt.getMonth() + 1)}.${dt.getFullYear()}`
+  let datetime = `${dt.getDate().padStart(2, '0')}.${(dt.getMonth() + 1).padStart(2, '0')}.${dt.getFullYear()}`
 
   if (withTime) {
-    datetime += ` ${prettyNumberForDate(dt.getHours())}:${prettyNumberForDate(dt.getMinutes())}`
+    datetime += ` ${dt.getHours().padStart(2, '0')}:${dt.getMinutes().padStart(2, '0')}`
   }
 
   return datetime
+}
+/**
+ * Возвращает дату в формате ISO со смещением по часовому поясу.
+ * Спасибо DeepSeek!
+ * @param {Date} date Дата
+ * @returns Дата в формате ISO вида: YYYY-MM-DDTHH:MM:SS+0300
+ */
+export function getLocalISOString(date = new Date()) {
+  // Получаем смещение часового пояса в минутах
+  const offset = date.getTimezoneOffset()
+
+  // Преобразуем смещение в формат ±HH:mm
+  const absOffset = Math.abs(offset)
+  const hours = Math.floor(absOffset / 60)
+    .toString()
+    .padStart(2, '0')
+  const minutes = (absOffset % 60).toString().padStart(2, '0')
+  const sign = offset > 0 ? '-' : '+'
+
+  // Модифицируем стандартную ISO строку
+  return new Date(date.getTime() - offset * 60000)
+    .toISOString()
+    .replace(/\.\d{3}Z$/, `${sign}${hours}:${minutes}`)
 }

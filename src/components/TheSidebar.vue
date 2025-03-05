@@ -37,8 +37,8 @@ onMounted(() => {
   background-color: var(--dark);
   color: var(--white);
   display: flex;
+  flex: 1;
   flex-direction: column;
-  width: 17rem;
 
   &__block {
     padding: var(--ident);

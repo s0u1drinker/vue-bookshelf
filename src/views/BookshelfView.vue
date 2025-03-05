@@ -27,11 +27,21 @@ onMounted(() => {
 
   loadMoreBooks()
 })
+/**
+ * Дополнительная загрузка книг из хранилища.
+ */
 const loadMoreBooks = () => {
   if (books.value.length < booksCount.value) {
     books.value = [...booksStore.getBooks(dataForLoad.value.start, dataForLoad.value.end)]
     dataForLoad.value.end += dataForLoad.value.count
   }
+}
+/**
+ * Изменение статуса.
+ * @param idStatus Идентификатор статуса.
+ */
+const changeStatus = ({ isbn, idStatus }) => {
+  booksStore.updateStatus(isbn, idStatus)
 }
 </script>
 
@@ -47,7 +57,12 @@ const loadMoreBooks = () => {
       <TheButton icon="Plus" text="Добавить книгу" color="blue" link="/bookstore" />
     </div>
     <div class="bookshelf__list">
-      <BookCard v-for="(book, index) in books" :key="index" :bookData="book" />
+      <BookCard
+        v-for="(book, index) in books"
+        :key="index"
+        :bookData="book"
+        @change-status="changeStatus"
+      />
     </div>
     <TheButton
       text="Загрузить ещё"
@@ -92,6 +107,8 @@ const loadMoreBooks = () => {
     display: flex;
     flex-wrap: wrap;
     gap: var(--ident);
+    justify-content: space-between;
+    width: 100%;
   }
 }
 </style>

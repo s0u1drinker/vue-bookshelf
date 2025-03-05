@@ -1,9 +1,24 @@
 import { defineStore } from 'pinia'
+import { useProgressStore } from '@/stores/progressStore'
 // Functions
-import { validDateInRequestToStore } from '@/helpers/datetimeFunctions'
+import { validDateInRequestToStore, getLocalISOString } from '@/helpers/datetimeFunctions'
 
 export const useBooksStore = defineStore('books', {
   state: () => ({
+    statusList: [
+      {
+        idStatus: false,
+        type: '',
+      },
+      {
+        idStatus: 1,
+        type: 'read',
+      },
+      {
+        idStatus: 2,
+        type: 'audio',
+      },
+    ],
     listOfBooks: [
       {
         bookSeries: 'The Horus Heresy',
@@ -418,5 +433,34 @@ export const useBooksStore = defineStore('books', {
       }
     },
   },
-  actions: {},
+  actions: {
+    /**
+     * Обновление статуса книги по ISBN.
+     * @param {String} isbn
+     * @param {Number} idStatus
+     */
+    updateStatus(isbn, idStatus) {
+      if ((isbn, idStatus)) {
+        const book = this.listOfBooks.filter((item) => item.isbn === isbn)[0]
+        const status = this.statusList.filter((item) => item.idStatus === idStatus)[0].type
+        const progress = useProgressStore()
+
+        if (status) {
+          book.status = status
+          book.dateStart = getLocalISOString()
+          book.dateEnd = ''
+          if (idStatus === 1) {
+            book.pagesRead = 0
+          }
+          if (idStatus === 2) {
+            book.totalListened = 0
+          }
+          progress.addNewEvent(isbn, status)
+        } else throw new Error('Передан неверный идентификатор статуса.')
+      } else
+        throw new Error(
+          `Невозможно обновить информацию о статусе: не передан один или несколько необходимых параметров (isbn: ${isbn}, idStatus: ${idStatus}).`,
+        )
+    },
+  },
 })

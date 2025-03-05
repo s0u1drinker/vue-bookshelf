@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 // Components
 import TheButton from '@/components/TheButton.vue'
@@ -26,51 +26,59 @@ const props = defineProps({
     },
   },
 })
+const emits = defineEmits(['change-status'])
 // Путь к картинке с обложкой книги.
 const bookCover = computed(() => {
   return getCoverPath(props.bookData.cover)
 })
 // Статус (прочитано/прослушано/в процессе) книги.
-const bookStatus = ref({
-  read: {
-    complete: false,
-    progress: false,
-    text: '',
-    color: '',
-  },
-  audio: {
-    complete: false,
-    progress: false,
-    text: '',
-    color: '',
-  },
-})
-// Смонитровано.
-onMounted(() => {
-  if (props.bookData.isComplete) {
-    if (props.bookData.pagesRead) {
-      bookStatus.value.read.complete = true
-      bookStatus.value.read.text = 'Прочитано'
-      bookStatus.value.read.color = 'green'
-    }
-    if (props.bookData.totalListened) {
-      bookStatus.value.audio.complete = true
-      bookStatus.value.audio.text = 'Прослушано'
-      bookStatus.value.audio.color = 'green'
-    }
-  } else if (props.bookData.status) {
-    if (props.bookData.status === 'read') {
-      bookStatus.value.read.progress = true
-      bookStatus.value.read.text = 'Читаю'
-      bookStatus.value.read.color = 'orange'
-    }
-    if (props.bookData.status === 'audio') {
-      bookStatus.value.audio.progress = true
-      bookStatus.value.audio.text = 'Слушаю'
-      bookStatus.value.audio.color = 'orange'
-    }
+const bookStatus = computed(() => {
+  return {
+    read: {
+      complete: props.bookData.isComplete && props.bookData.pagesRead ? true : false,
+      progress: props.bookData.status === 'read' ? true : false,
+      text:
+        props.bookData.isComplete && props.bookData.pagesRead
+          ? 'Прочитано'
+          : props.bookData.status === 'read'
+            ? 'Читаю'
+            : '',
+      color:
+        props.bookData.isComplete && props.bookData.pagesRead
+          ? 'green'
+          : props.bookData.status === 'read'
+            ? 'orange'
+            : '',
+    },
+    audio: {
+      complete: props.bookData.isComplete && props.bookData.totalListened ? true : false,
+      progress: props.bookData.status === 'audio' ? true : false,
+      text:
+        props.bookData.isComplete && props.bookData.totalListened
+          ? 'Прослушано'
+          : props.bookData.status === 'audio'
+            ? 'Слушаю'
+            : '',
+      color:
+        props.bookData.isComplete && props.bookData.totalListened
+          ? 'green'
+          : props.bookData.status === 'audio'
+            ? 'orange'
+            : '',
+    },
   }
 })
+/**
+ * Генерирует событие изменения статуса.
+ * @param idStatus Идентификатор статуса.
+ */
+const changeStatus = (idStatus) => {
+  // Отправляем наврех информацию об изменении статуса.
+  emits('change-status', {
+    isbn: props.bookData.isbn,
+    idStatus,
+  })
+}
 </script>
 
 <template>
@@ -103,8 +111,8 @@ onMounted(() => {
           v-if="bookStatus.read.progress || bookStatus.audio.progress"
         />
         <template v-else>
-          <TheButton color="blue" icon="BookOpen" text="Почитать" />
-          <TheButton color="red" icon="Headphones" text="Послушать" />
+          <TheButton color="blue" icon="BookOpen" text="Почитать" @click="changeStatus(1)" />
+          <TheButton color="red" icon="Headphones" text="Послушать" @click="changeStatus(2)" />
         </template>
       </div>
       <RouterLink :to="`/book/${bookData.isbn}`" class="link">Подробнее</RouterLink>

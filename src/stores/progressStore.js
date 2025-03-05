@@ -7,6 +7,7 @@ export const useProgressStore = defineStore('progress', {
         isbn: '9785918783863',
         list: [
           {
+            idEvent: 0,
             type: 'audio',
             isEnd: false,
             progress: [
@@ -30,9 +31,37 @@ export const useProgressStore = defineStore('progress', {
         ],
       },
       {
+        isbn: '9781800262768',
+        list: [
+          {
+            idEvent: 0,
+            type: 'audio',
+            isEnd: true,
+            progress: [
+              {
+                dateStart: '2025-01-04T21:10:14+0300',
+                dateStop: '2025-01-04T22:26:54+0300',
+                count: 112,
+              },
+              {
+                dateStart: '2025-01-06T18:57:46+0300',
+                dateStop: '2025-01-06T20:18:35+0300',
+                count: 112,
+              },
+              {
+                dateStart: '2025-01-09T20:14:22+0300',
+                dateStop: '2025-01-09T21:52:38+0300',
+                count: 113,
+              },
+            ],
+          },
+        ],
+      },
+      {
         isbn: '9785918783375',
         list: [
           {
+            idEvent: 0,
             type: 'read',
             isEnd: false,
             progress: [
@@ -59,6 +88,7 @@ export const useProgressStore = defineStore('progress', {
         isbn: '9785389151222',
         list: [
           {
+            idEvent: 0,
             type: 'audio',
             isEnd: true,
             progress: [
@@ -95,6 +125,7 @@ export const useProgressStore = defineStore('progress', {
         isbn: '9785389097209',
         list: [
           {
+            idEvent: 0,
             type: 'read',
             isEnd: true,
             progress: [
@@ -121,6 +152,7 @@ export const useProgressStore = defineStore('progress', {
         isbn: '9785918780381',
         list: [
           {
+            idEvent: 0,
             type: 'read',
             isEnd: true,
             progress: [
@@ -147,6 +179,7 @@ export const useProgressStore = defineStore('progress', {
         isbn: '9785918780374',
         list: [
           {
+            idEvent: 0,
             type: 'read',
             isEnd: true,
             progress: [
@@ -173,6 +206,7 @@ export const useProgressStore = defineStore('progress', {
         isbn: '9785907577503',
         list: [
           {
+            idEvent: 0,
             type: 'read',
             isEnd: true,
             progress: [
@@ -204,6 +238,7 @@ export const useProgressStore = defineStore('progress', {
         isbn: '9785042040863',
         list: [
           {
+            idEvent: 0,
             type: 'read',
             isEnd: true,
             progress: [
@@ -231,6 +266,7 @@ export const useProgressStore = defineStore('progress', {
         isbn: '',
         list: [
           {
+            idEvent: 0,
             type: '',
             isEnd: false,
             progress: [
@@ -293,5 +329,38 @@ export const useProgressStore = defineStore('progress', {
       }
     },
   },
-  actions: {},
+  actions: {
+    // Добавление нового события начала чтения/прослушивания.
+    addNewEvent(isbn, type) {
+      const progress = this.progressList.filter((item) => item.isbn === isbn)
+
+      switch (progress.length) {
+        case 0:
+          // Записи о такой книге ещё нет. Добавляем.
+          this.progressList.push({
+            isbn,
+            list: [
+              {
+                idEvent: 0,
+                type,
+                isEnd: false,
+                progress: [],
+              },
+            ],
+          })
+          break
+        case 1:
+          // Книга есть. Добавляем новое событие в list.
+          progress[0].list.push({
+            idEvent: progress[0].list.length,
+            type,
+            isEnd: false,
+            progress: [],
+          })
+          break
+        default:
+          throw new Error('В хранилище <ProgressStore> найдены несколько записей у одной книги.')
+      }
+    },
+  },
 })
