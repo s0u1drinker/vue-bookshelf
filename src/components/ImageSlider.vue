@@ -1,7 +1,5 @@
 <script setup>
 import { ref, watch, onMounted, computed } from 'vue'
-// Helper
-import { getCoverPath } from '@/helpers/functions'
 // Icon
 import TheIcon from '@/components/TheIcon.vue'
 
@@ -9,6 +7,10 @@ const props = defineProps({
   slides: {
     type: Array,
     required: true,
+  },
+  showSlide: {
+    type: Number,
+    default: 0,
   },
 })
 const emits = defineEmits(['change-slide'])
@@ -25,7 +27,7 @@ const moveSlide = (direction) => {
     slideIndexToShow.value =
       (slideIndexToShow.value - 1 + props.slides.length) % props.slides.length
   } else {
-    console.error('Wrong direction to move slider.')
+    console.error('Задано неверное направление для слайдера.')
   }
 }
 // Наблюдаем за изменением индекса текщего слайда.
@@ -34,9 +36,16 @@ watch(slideIndexToShow, (newValue, oldValue) => {
     emits('change-slide', slideIndexToShow.value)
   }
 })
+// Наблюдаем за изменением в props
+watch(props, (newValue) => {
+  // Если был добавлен новый элемент в слайдер, то необходимо его отобразить.
+  if (newValue.showSlide !== slideIndexToShow.value) {
+    slideIndexToShow.value = newValue.showSlide
+  }
+})
 // Путь к картинке с обложкой книги.
 const bookCover = computed(() => {
-  return getCoverPath(props.slides[slideIndexToShow.value])
+  return props.slides[slideIndexToShow.value]
 })
 // Смонтировано.
 onMounted(() => {

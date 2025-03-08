@@ -406,10 +406,15 @@ export const useBooksStore = defineStore('books', {
     },
     /**
      * Возвращает список книг, которые в данный момент имеют статус "Читаю" и "Слушаю".
+     * Список отсортирован по дате начала.
      * @returns Array Список книг.
      */
     getBooksOnReadingAndOnAudition(state) {
-      return state.listOfBooks.filter((item) => item.status)
+      return state.listOfBooks
+        .filter((item) => item.status)
+        .sort((a, b) => {
+          return new Date(a.dateStart) > new Date(b.dateStart) ? 1 : -1
+        })
     },
     /**
      * Возвращает книги из хранилища с определённой позиции в определённом количестве.
