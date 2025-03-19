@@ -26,10 +26,17 @@ export function validDateInRequestToStore(year, month) {
 
   return !errorFlag
 }
-
+/**
+ * Превращает некрасивую цифру в красивую строку ('01', '07' и т.д.).
+ * @param {Number} num Цифра.
+ * @returns {String} Строка вида: '04', '09' и т.д.
+ */
+export function prettyNumber(num) {
+  return String(num).padStart(2, '0')
+}
 /**
  * Возвращает красивую дату.
- * P.S.: Да-да, я в курсе, что можно было обойтись функцией .toLocaleString(), но доверия пользовательскому браузеру у меня нет.
+ * Можно было, конечно, обойтись функцией .toLocaleString(), но доверия пользовательскому браузеру у меня нет.
  * @param {Date} dt Дата
  * @param {Boolean} withTime Если необходимо отобразить время
  * @returns {String} Дата (+ время) в красивом формате: 01.01.2025 16:10
@@ -39,16 +46,16 @@ export function prettyStringDate(dt, withTime = false) {
     dt = new Date(dt)
   }
 
-  let datetime = `${dt.getDate().padStart(2, '0')}.${(dt.getMonth() + 1).padStart(2, '0')}.${dt.getFullYear()}`
+  let datetime = `${prettyNumber(dt.getDate())}.${prettyNumber(dt.getMonth() + 1)}.${prettyNumber(dt.getFullYear())}`
 
   if (withTime) {
-    datetime += ` ${dt.getHours().padStart(2, '0')}:${dt.getMinutes().padStart(2, '0')}`
+    datetime += ` ${prettyNumber(dt.getHours())}:${prettyNumber(dt.getMinutes())}`
   }
 
   return datetime
 }
 /**
- * Возвращает дату в формате ISO со смещением по часовому поясу.
+ * Возвращает дату в формате ISO с указанием смещения по часовому поясу.
  * Спасибо DeepSeek!
  * @param {Date} date Дата
  * @returns Дата в формате ISO вида: YYYY-MM-DDTHH:MM:SS+0300
@@ -69,4 +76,15 @@ export function getLocalISOString(date = new Date()) {
   return new Date(date.getTime() - offset * 60000)
     .toISOString()
     .replace(/\.\d{3}Z$/, `${sign}${hours}:${minutes}`)
+}
+/**
+ * Переводит минуты в часы.
+ * @param {Number} minutes Минуты.
+ * @returns {String} Строка вида '1 ч. 29 мин.'.
+ */
+export function minutesToHours(minutes) {
+  const hours = Math.floor(minutes / 60)
+  const remainingMinutes = minutes % 60
+
+  return hours > 0 ? `${hours} ч. ${remainingMinutes} мин.` : `${remainingMinutes} мин.`
 }

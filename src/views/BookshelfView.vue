@@ -107,7 +107,6 @@ const changeStatus = ({ isbn, idStatus }) => {
     display: flex;
     flex-wrap: wrap;
     gap: var(--ident);
-    justify-content: space-between;
     width: 100%;
   }
 }

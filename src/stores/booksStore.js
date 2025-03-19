@@ -26,7 +26,7 @@ export const useBooksStore = defineStore('books', {
         author: 'Ник Кайм',
         isbn: '9785918783375',
         pages: 480,
-        audioDuration: 0,
+        audioDuration: 551,
         cover: '9785918783375.webp',
         dateAdd: '2024-12-17T13:24:00+0300',
         dateStart: '2024-12-21T21:42:32+0300',
@@ -45,7 +45,7 @@ export const useBooksStore = defineStore('books', {
         author: 'Айзек Азимов',
         isbn: '9785040939077',
         pages: 320,
-        audioDuration: 0,
+        audioDuration: 382,
         cover: '9785040939077.webp',
         dateAdd: '2024-12-19T19:12:21+0300',
         dateStart: '',
@@ -120,7 +120,7 @@ export const useBooksStore = defineStore('books', {
         title: 'Цивилизация статуса',
         author: 'Роберт Шекли',
         isbn: '9785389151222',
-        pages: 0,
+        pages: 140,
         audioDuration: 335,
         cover: '9785389151222.webp',
         dateAdd: '2024-09-01T13:21:48+0300',
@@ -140,7 +140,7 @@ export const useBooksStore = defineStore('books', {
         author: 'Кир Булычёв',
         isbn: '9785171665302',
         pages: 400,
-        audioDuration: 0,
+        audioDuration: 568,
         cover: '9785171665302.webp',
         dateAdd: '2025-02-26T22:35:11+0300',
         dateStart: '',
@@ -159,7 +159,7 @@ export const useBooksStore = defineStore('books', {
         author: 'Мария Семёнова',
         isbn: '9785389097209',
         pages: 544,
-        audioDuration: 0,
+        audioDuration: 639,
         cover: '9785389097209.webp',
         dateAdd: '2023-09-26T21:35:11+0300',
         dateStart: '2023-09-27T12:37:11+0300',
@@ -178,7 +178,7 @@ export const useBooksStore = defineStore('books', {
         author: 'Мария Семёнова, Андрей Константинов',
         isbn: '9785389079618',
         pages: 416,
-        audioDuration: 0,
+        audioDuration: 501,
         cover: '9785389079618.webp',
         dateAdd: '2025-02-26T23:15:27+0300',
         dateStart: '',
@@ -197,7 +197,7 @@ export const useBooksStore = defineStore('books', {
         author: 'Аарон Дембски-Боуден',
         isbn: '9785918780381',
         pages: 416,
-        audioDuration: 0,
+        audioDuration: 498,
         cover: '9785918780381.webp',
         dateAdd: '2023-06-13T10:24:16+0300',
         dateStart: '2023-06-20T16:59:21+0300',
@@ -216,7 +216,7 @@ export const useBooksStore = defineStore('books', {
         author: 'Аарон Дембски-Боуден',
         isbn: '9785918780374',
         pages: 384,
-        audioDuration: 0,
+        audioDuration: 499,
         cover: '9785918780374.webp',
         dateAdd: '2023-12-13T11:52:16+0300',
         dateStart: '2023-12-18T20:58:16+0300',
@@ -235,7 +235,7 @@ export const useBooksStore = defineStore('books', {
         author: 'Ник Кайм',
         isbn: '9785918783931',
         pages: 536,
-        audioDuration: 0,
+        audioDuration: 611,
         cover: '9785918783931.webp',
         dateAdd: '2024-08-02T17:26:49+0300',
         dateStart: '',
@@ -254,7 +254,7 @@ export const useBooksStore = defineStore('books', {
         author: 'Роберт А. Сальваторе',
         isbn: '9785918781012',
         pages: 768,
-        audioDuration: 0,
+        audioDuration: 932,
         cover: '9785918781012.webp',
         dateAdd: '2023-11-25T18:24:19+0300',
         dateStart: '',
@@ -273,7 +273,7 @@ export const useBooksStore = defineStore('books', {
         author: 'Роберт Асприн, Питер Хек',
         isbn: '9785171518196',
         pages: 680,
-        audioDuration: 0,
+        audioDuration: 785,
         cover: '9785171518196.webp',
         dateAdd: '2024-12-08T22:58:40+0300',
         dateStart: '',
@@ -292,7 +292,7 @@ export const useBooksStore = defineStore('books', {
         author: 'Вальтер Скотт',
         isbn: '9785907577503',
         pages: 512,
-        audioDuration: 0,
+        audioDuration: 642,
         cover: '9785907577503.webp',
         dateAdd: '2023-01-03T21:18:40+0300',
         dateStart: '2023-01-03T21:19:40+0300',
@@ -312,7 +312,7 @@ export const useBooksStore = defineStore('books', {
         author: 'Рэй Брэдбери',
         isbn: '9785042040863',
         pages: 304,
-        audioDuration: 0,
+        audioDuration: 427,
         cover: '',
         dateAdd: '2023-01-07T10:11:40+0300',
         dateStart: '2023-01-07T10:11:54+0300',
@@ -434,7 +434,52 @@ export const useBooksStore = defineStore('books', {
      */
     getBookInfoByISBN: (state) => {
       return (isbn) => {
-        return state.listOfBooks.filter((book) => book.isbn === isbn)
+        return state.listOfBooks.filter((book) => book.isbn === isbn)[0]
+      }
+    },
+    /**
+     * @param {String} isbn ISBN книги.
+     * @returns {Boolean} Книга в процессе изучения или нет.
+     */
+    isBookInProgress: (state) => {
+      return (isbn) => {
+        return state.getBookInfoByISBN(isbn).status ? true : false
+      }
+    },
+    /**
+     * @param {String} isbn ISBN книги.
+     * @returns {Number} Всего страниц/минут в книге.
+     */
+    getTotalCount: (state) => {
+      return (isbn) => {
+        const book = state.getBookInfoByISBN(isbn)
+        const status = book.status
+
+        return status === 'read' ? book.pages : status === 'audio' ? book.audioDuration : 0
+      }
+    },
+    /**
+     * @param {String} isbn ISBN книги.
+     * @returns {Number} Прочитано страниц/прослушано минут в книге.
+     */
+    getCurrentCount: (state) => {
+      return (isbn) => {
+        const book = state.getBookInfoByISBN(isbn)
+        const status = book.status
+
+        return status === 'read' ? book.pagesRead : status === 'audio' ? book.totalListened : 0
+      }
+    },
+    /**
+     * @param {String} isbn ISBN книги.
+     * @returns {Number} Прогресс книги в процентах.
+     */
+    getBookProgressInPercent: (state) => {
+      return (isbn) => {
+        const total = state.getTotalCount(isbn)
+        const current = state.getCurrentCount(isbn)
+
+        return ((current * 100) / total).toFixed(1) || 0
       }
     },
   },
@@ -454,6 +499,8 @@ export const useBooksStore = defineStore('books', {
           book.status = status
           book.dateStart = getLocalISOString()
           book.dateEnd = ''
+          book.isComplete = false
+
           if (idStatus === 1) {
             book.pagesRead = 0
           }
@@ -466,6 +513,64 @@ export const useBooksStore = defineStore('books', {
         throw new Error(
           `Невозможно обновить информацию о статусе: не передан один или несколько необходимых параметров (isbn: ${isbn}, idStatus: ${idStatus}).`,
         )
+    },
+    /**
+     * Обновляет количество минут/страниц.
+     * @param {String} isbn ISBN книги.
+     * @param {Number} count Количество минут/страниц.
+     * @param {String} dateStop Дата окончания.
+     */
+    updateCount(isbn, count, dateStop) {
+      if (isbn) {
+        const book = this.getBookInfoByISBN(isbn)
+
+        if (count) {
+          let cuurentCount, totalCount
+
+          if (book.status === 'read') {
+            book.pagesRead += count
+            cuurentCount = book.pagesRead
+            totalCount = book.pages
+          }
+
+          if (book.status === 'audio') {
+            book.totalListened += count
+            cuurentCount = book.totalListened
+            totalCount = book.audioDuration
+          }
+
+          if (cuurentCount >= totalCount) {
+            this.setBookComplete(isbn, dateStop)
+            return true
+          } else return false
+        } else throw new Error('Не передана информация для обновления данных о книге.')
+      } else throw new Error('Не передан ISBN книги для обновления информации.')
+    },
+    /**
+     * Книга закончена. Обновляем информацию об этом.
+     * @param {String} isbn ISBN книги.
+     * @param {String} dateStop Дата окончания.
+     */
+    setBookComplete(isbn, dateStop) {
+      const book = this.getBookInfoByISBN(isbn)
+
+      // Делаем счётчик прочитанного/прослушанного равным общему количеству, чтобы не было проблем с какими-нибудь подсчётами.
+      book.status === 'read' ? (book.pagesRead = book.pages) : false
+      book.status === 'audio' ? (book.totalListened = book.audioDuration) : false
+      // Выставляем значения, соответствующие законченной книге.
+      book.isComplete = true
+      book.dateEnd = dateStop
+      book.status = false
+    },
+    /**
+     * Добавляет мнение о книге.
+     * @param {String} isbn ISBN книги.
+     * @param {String} text Мнение о книге.
+     */
+    setOpinion(isbn, text) {
+      const book = this.getBookInfoByISBN(isbn)
+
+      book.opinion = text
     },
   },
 })

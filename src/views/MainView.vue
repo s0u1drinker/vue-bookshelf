@@ -61,78 +61,86 @@ const showSelectedPeriodData = () => {
 
 <template>
   <h1>Немного статистики</h1>
-  <StatBlock title="Все книги">
-    <ul>
-      <li>На полке: {{ booksCount }}</li>
-      <li>Закончено: {{ `${booksCompleteCount.all} (${completePercent}%)` }}</li>
-      <li>Из них:</li>
-      <li>- прочитано: {{ booksCompleteCount.read }}</li>
-      <li>- прослушано: {{ booksCompleteCount.audio }}</li>
-      <li>Средний рейтинг: {{ ratingsStore.getAverageRating() }}</li>
-    </ul>
-  </StatBlock>
-  <div class="block_text">
-    <span
-      >Выберите период для отображения:
-      <span class="tooltip" title="Если необходимы данные только за год - оставьте значение пустым."
-        >месяц</span
-      >&nbsp;
-    </span>
-    <TheSelect
-      :options="months"
-      v-model="userSelectedMonth"
-      :selectedElement="new Date().getMonth()"
-    />
-    <span> год </span>
-    <TheSelect
-      :options="yearsForSelect()"
-      :addEmptyFirstElement="false"
-      v-model="userSelectedYear"
-      :selectedElement="new Date().getFullYear()"
-    />
-    <TheButton text="Показать" color="blue" @click="showSelectedPeriodData" />
-  </div>
-  <div class="block_wrapper">
-    <StatBlock :title="userBlockTitle">
+  <div class="statistic">
+    <StatBlock title="Все книги">
       <ul>
-        <li>Закончено книг: {{ booksCompleteCountAtUserPeriod.all }}</li>
+        <li>На полке: {{ booksCount }}</li>
+        <li>Закончено: {{ `${booksCompleteCount.all} (${completePercent}%)` }}</li>
         <li>Из них:</li>
-        <li>- прочитано: {{ booksCompleteCountAtUserPeriod.read }}</li>
-        <li>- прослушано: {{ booksCompleteCountAtUserPeriod.audio }}</li>
-        <li>Средний рейтинг: {{ userBlockRating }}</li>
+        <li>- прочитано: {{ booksCompleteCount.read }}</li>
+        <li>- прослушано: {{ booksCompleteCount.audio }}</li>
+        <li>Средний рейтинг: {{ ratingsStore.getAverageRating() }}</li>
       </ul>
     </StatBlock>
-    <StatBlock
-      title="Список книг"
-      :slaveClass="true"
-      v-if="booksCompleteCountAtUserPeriod.list?.length"
-    >
-      <ol>
-        <li v-for="(book, index) in booksCompleteCountAtUserPeriod.list" :key="index">
-          <RouterLink :to="`/book/${book.isbn}`" class="link">
-            <span class="italic">{{ book.author }}</span> -
-            <span class="bold">&laquo;{{ book.title }}&raquo;</span>
-          </RouterLink>
-        </li>
-      </ol>
-    </StatBlock>
+    <div class="statistic__block_text">
+      <span
+        >Выберите период для отображения:
+        <span
+          class="tooltip"
+          title="Если необходимы данные только за год - оставьте значение пустым."
+          >месяц</span
+        >&nbsp;
+      </span>
+      <TheSelect
+        :options="months"
+        v-model="userSelectedMonth"
+        :selectedElement="new Date().getMonth()"
+      />
+      <span> год </span>
+      <TheSelect
+        :options="yearsForSelect()"
+        :addEmptyFirstElement="false"
+        v-model="userSelectedYear"
+        :selectedElement="new Date().getFullYear()"
+      />
+      <TheButton text="Показать" color="blue" @click="showSelectedPeriodData" />
+    </div>
+    <div class="statistic__block_wrapper">
+      <StatBlock :title="userBlockTitle">
+        <ul>
+          <li>Закончено книг: {{ booksCompleteCountAtUserPeriod.all }}</li>
+          <li>Из них:</li>
+          <li>- прочитано: {{ booksCompleteCountAtUserPeriod.read }}</li>
+          <li>- прослушано: {{ booksCompleteCountAtUserPeriod.audio }}</li>
+          <li>Средний рейтинг: {{ userBlockRating }}</li>
+        </ul>
+      </StatBlock>
+      <StatBlock
+        title="Список книг"
+        :slaveClass="true"
+        v-if="booksCompleteCountAtUserPeriod.list?.length"
+      >
+        <ol>
+          <li v-for="(book, index) in booksCompleteCountAtUserPeriod.list" :key="index">
+            <RouterLink :to="`/book/${book.isbn}`" class="link">
+              <span class="italic">{{ book.author }}</span> -
+              <span class="bold">&laquo;{{ book.title }}&raquo;</span>
+            </RouterLink>
+          </li>
+        </ol>
+      </StatBlock>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.block {
-  &_wrapper {
-    align-items: flex-start;
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: var(--ident);
-  }
+.statistic {
+  margin-top: var(--ident-double);
 
-  &_text {
-    margin: calc(var(--ident) * 2) 0 var(--ident) 0;
+  &__block {
+    &_wrapper {
+      align-items: flex-start;
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: var(--ident);
+    }
 
-    & > button {
-      margin-left: var(--ident);
+    &_text {
+      margin: calc(var(--ident) * 2) 0 var(--ident) 0;
+
+      & > button {
+        margin-left: var(--ident);
+      }
     }
   }
 }

@@ -9,6 +9,26 @@ export const useRatingsStore = defineStore('ratings', {
       { involvement: 'Вовлеченность' },
       { emotions: 'Эмоции' },
     ],
+    template: {
+      appearance: 0,
+      plot: 0,
+      atmosphere: 0,
+      involvement: 0,
+      emotions: 0,
+      summary: 0,
+    },
+    ratingArray: [
+      { value: 10, label: 10 },
+      { value: 9, label: 9 },
+      { value: 8, label: 8 },
+      { value: 7, label: 7 },
+      { value: 6, label: 6 },
+      { value: 5, label: 5 },
+      { value: 4, label: 4 },
+      { value: 3, label: 3 },
+      { value: 2, label: 2 },
+      { value: 1, label: 1 },
+    ],
     ratings: [
       {
         bookISBN: '9785918780381',
@@ -52,12 +72,34 @@ export const useRatingsStore = defineStore('ratings', {
   }),
   getters: {
     /**
+     * @returns Список параметров рейтинга.
+     */
+    getParameters(state) {
+      return state.parameters
+    },
+    /**
+     * @returns Шаблон для заполнения.
+     */
+    getTemplate(state) {
+      return state.template
+    },
+    /**
+     * @returns Рейтинг для выбора в выпадающем списке.
+     */
+    getRatingArray(state) {
+      return state.ratingArray
+    },
+    /**
      * Возвращает рейтинг книги.
      * @param {String} isbn ISBN книги.
      * @returns Object Рейтинг книги.
      */
     getBookRating: (state) => {
-      return (isbn) => state.ratings.filter((item) => item.bookISBN === isbn)
+      return (isbn) => {
+        const rating = state.ratings.filter((item) => item.bookISBN === isbn)[0]
+
+        return rating || state.getTemplate
+      }
     },
     /**
      * Возвращает средний рейтинг книг.
@@ -104,7 +146,7 @@ export const useRatingsStore = defineStore('ratings', {
           if (index === books.length - 1) {
             // Если делимое или делитель равны 0
             return sum === 0 || allBooksWithRatingCount === 0
-              ? '-' // возвращаем прочерк, т.к. ни у одной из книг нет ооценки
+              ? '-' // возвращаем прочерк, т.к. ни у одной из книг нет оценки
               : (sum / allBooksWithRatingCount).toFixed(2) // или частное.
           }
 
@@ -113,5 +155,9 @@ export const useRatingsStore = defineStore('ratings', {
       }
     },
   },
-  actions: {},
+  actions: {
+    addNewRating(isbn, ratingTemplate) {
+      this.ratings.push({ bookISBN: isbn, ...ratingTemplate })
+    },
+  },
 })

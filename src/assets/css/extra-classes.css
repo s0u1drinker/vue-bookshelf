@@ -23,6 +23,12 @@
   border-bottom: 1px dashed var(--dark-blue);
   cursor: help;
 }
+/* Элементы */
+.input {
+  &_error {
+    border-color: var(--button-red);
+  }
+}
 /* Отступы */
 .mt {
   &_1 {

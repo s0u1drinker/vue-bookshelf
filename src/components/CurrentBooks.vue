@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { RouterLink } from 'vue-router'
 // Store
 import { useBooksStore } from '@/stores/booksStore.js'
@@ -10,27 +10,25 @@ import TheIcon from '@/components/TheIcon.vue'
 import { getCoverPath } from '@/helpers/functions'
 
 const booksStore = useBooksStore()
-// Список книг, которые имеют статус "Читаю" или "Слушаю".
-const currentBooks = ref([])
-// Информация о книге, которая в данный момент отображается на слайде.
-const bookOnSlideInfo = ref({})
 // Порядковый номер слайда для отображения при добавлении нового элемента.
 const slideToShowOnTrigger = ref(0)
-// Наименование иконки для отображения статуса книги.
-let iconName = ref('')
-// Прогресс в процентах.
-let bookProgress = ref(0)
-// Наблюдаем за изменением в хранилище с книгами, чтобы обновить список книг в слайдере.
-watch(booksStore.listOfBooks, () => {
-  currentBooks.value = booksStore.getBooksOnReadingAndOnAudition
-  // Показать добавленную книгу в слайдере.
-  slideToShowOnTrigger.value = currentBooks.value.length - 1
+// Список книг, которые имеют статус "Читаю" или "Слушаю".
+const currentBooks = computed(() => {
+  return booksStore.getBooksOnReadingAndOnAudition
 })
 // Слайды.
 const currentBooksSlides = computed(() => {
   return currentBooks.value.map((item) => getCoverPath(item.cover))
 })
-// Вычисляемое значение цвета элемента, отображающего прогресс.
+// Информация о книге, которая в данный момент отображается на слайде.
+const bookOnSlideInfo = computed(() => {
+  return currentBooks.value[slideToShowOnTrigger.value]
+})
+// Прогресс в процентах.
+let bookProgress = computed(() => {
+  return booksStore.getBookProgressInPercent(bookOnSlideInfo.value.isbn)
+})
+// Цвет элемента, отображающего прогресс.
 const progressColor = computed(() => {
   const percentToValue = Math.trunc((255 * bookProgress.value) / 100)
   const red = 255 - percentToValue
@@ -39,40 +37,28 @@ const progressColor = computed(() => {
 
   return `background-color:rgb(${red},${green},0);${textColor}`
 })
+// Иконка для отображения статуса книги.
+const iconName = computed(() => {
+  const status = bookOnSlideInfo.value.status
+
+  return status === 'read' ? 'BookOpen' : status === 'audio' ? 'Headphones' : 'Question'
+})
 // Именованный маршрут для router-link
 const pathToBook = computed(() => {
   return `/book/${bookOnSlideInfo.value.isbn}`
+})
+//
+watch(booksStore.listOfBooks, () => {
+  // Показать добавленную книгу в слайдере.
+  slideToShowOnTrigger.value = currentBooks.value.length - 1
 })
 /**
  * Функция обновляет информцию о книге при изменении слайда.
  * @param idBookToShow Порядковый номер книги в объекте currentBooks.
  */
 const changeSlide = (idBookToShow) => {
-  bookOnSlideInfo.value = currentBooks.value[idBookToShow]
-
-  const status = bookOnSlideInfo.value.status
-  let all
-  // На основе статуса определяем иконку и считаем прогресс.
-  if (status === 'read') {
-    all = bookOnSlideInfo.value.pages
-    iconName.value = 'BookOpen'
-
-    bookProgress.value =
-      all && all > 0 ? ((bookOnSlideInfo.value.pagesRead * 100) / all).toFixed(1) : 0
-  } else if (status === 'audio') {
-    all = bookOnSlideInfo.value.audioDuration
-    iconName.value = 'Headphones'
-
-    bookProgress.value =
-      all && all > 0 ? ((bookOnSlideInfo.value.totalListened * 100) / all).toFixed(1) : 0
-  } else {
-    iconName.value = 'Question'
-  }
+  slideToShowOnTrigger.value = idBookToShow
 }
-// Смонтировано.
-onMounted(() => {
-  currentBooks.value = booksStore.getBooksOnReadingAndOnAudition
-})
 </script>
 
 <template>

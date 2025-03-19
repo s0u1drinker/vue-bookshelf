@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { computed } from 'vue'
 // Components
 import Navigation from '@/components/TheNavigation.vue'
 import CurrentBooks from '@/components/CurrentBooks.vue'
@@ -8,10 +8,8 @@ import { useProgressStore } from '@/stores/progressStore.js'
 
 const progressStore = useProgressStore()
 // Статистика за текущий день.
-const statisticToday = ref({})
-
-onMounted(() => {
-  statisticToday.value = progressStore.getStatisticsByDate(new Date())
+const statisticToday = computed(() => {
+  return progressStore.getStatisticsByDate(new Date())
 })
 </script>
 

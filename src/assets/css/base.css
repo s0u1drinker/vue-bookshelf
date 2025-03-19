@@ -32,6 +32,15 @@ main {
   flex: 9;
 }
 
+p {
+  margin: 0;
+  line-height: 1.5;
+
+  & + & {
+    margin-top: var(--ident-half);
+  }
+}
+
 a {
   color: var(--link-color);
   text-decoration: none;
@@ -52,7 +61,7 @@ ul {
     list-style: none;
 
     & + li {
-      margin-top: 0.5rem;
+      margin-top: var(--ident-half);
     }
   }
 }
@@ -69,4 +78,25 @@ ol {
 
 select {
   padding: var(--ident-quarter);
+}
+
+input {
+  border: 1px solid var(--blue);
+  padding: var(--ident-quarter);
+}
+
+dialog {
+  padding: 0;
+  border: none;
+  box-shadow: var(--shadow-options);
+
+  &[open]::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+  }
+}
+
+textarea {
+  box-sizing: border-box;
+  padding: var(--ident-half);
 }

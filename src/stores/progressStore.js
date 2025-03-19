@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { useBooksStore } from '@/stores/booksStore'
 
 export const useProgressStore = defineStore('progress', {
   state: () => ({
@@ -211,9 +212,14 @@ export const useProgressStore = defineStore('progress', {
             isEnd: true,
             progress: [
               {
+                dateStart: '2023-01-03T19:19:40+0300',
+                dateStop: '2023-01-03T21:01:40+0300',
+                count: 100,
+              },
+              {
                 dateStart: '2023-01-03T21:19:40+0300',
                 dateStop: '2023-01-04T01:01:40+0300',
-                count: 168,
+                count: 68,
               },
               {
                 dateStart: '2023-01-04T12:33:40+0300',
@@ -221,8 +227,8 @@ export const useProgressStore = defineStore('progress', {
                 count: 104,
               },
               {
-                dateStart: '2023-01-04T19:39:40+0300',
-                dateStop: '2023-01-04T22:51:40+0300',
+                dateStart: '2023-01-05T19:39:40+0300',
+                dateStop: '2023-01-05T22:51:40+0300',
                 count: 70,
               },
               {
@@ -290,7 +296,7 @@ export const useProgressStore = defineStore('progress', {
      */
     getProgressListByISBN: (state) => {
       return (isbn) => {
-        return state.progressList.filter((item) => item.isbn === isbn).list
+        return state.progressList.filter((item) => item.isbn === isbn)[0]?.list
       }
     },
     /**
@@ -328,6 +334,83 @@ export const useProgressStore = defineStore('progress', {
         } else throw new Error('Переменная для хранения даты имеет неверный тип.')
       }
     },
+    /**
+     * Данные о событии по идентификатору.
+     * @param {String} isbn ISBN книги.
+     * @param {Number} idEvent ID события.
+     * @returns {Object} Данные о событии.
+     */
+    getEventByID: (state) => {
+      return (isbn, idEvent) => {
+        const progressList = state.getProgressListByISBN(isbn)
+
+        return progressList.filter((item) => item.idEvent === idEvent)[0]
+      }
+    },
+    /**
+     * Возвращает последнее событие в списке прогресса по ISBN.
+     * @param {String} isbn ISBN книги.
+     * @returns {Object} Последнее событие в списке прогреса.
+     */
+    getLastEventByISBN: (state) => {
+      return (isbn) => {
+        const list = state.getProgressListByISBN(isbn)
+
+        return list.at(-1)
+      }
+    },
+    /**
+     * Всего прочитано/прослушано в текущем событии.
+     * @param {String} isbn ISBN книги.
+     * @param {Number} idEvent ID события.
+     * @returns {Number} Количество страниц/минут.
+     */
+    getAllCountsInLastEvent: (state) => {
+      return (isbn) => {
+        const event = state.getLastEventByISBN(isbn)
+
+        return event.progress.reduce((accumulator, currentValue) => {
+          return accumulator + currentValue.count
+        }, 0)
+      }
+    },
+    /**
+     * @param {String} ISBN книги.
+     * @returns {Object} Информация о статусе книги.
+     */
+    getBookStatus: (state) => {
+      return (isbn) => {
+        const progress = state.getProgressListByISBN(isbn)
+        const lastBookRead = progress?.filter((item) => item.type === 'read').at(-1)
+        const lastBookAudio = progress?.filter((item) => item.type === 'audio').at(-1)
+
+        return {
+          read: {
+            complete: lastBookRead && lastBookRead.isEnd,
+            progress: lastBookRead && !lastBookRead.isEnd,
+            get text() {
+              return this.complete ? 'Прочитано' : this.progress ? 'Читаю' : ''
+            },
+            get color() {
+              return this.complete ? 'green' : this.progress ? 'orange' : ''
+            },
+          },
+          audio: {
+            complete: lastBookAudio && lastBookAudio.isEnd,
+            progress: lastBookAudio && !lastBookAudio.isEnd,
+            get text() {
+              return this.complete ? 'Прослушано' : this.progress ? 'Слушаю' : ''
+            },
+            get color() {
+              return this.complete ? 'green' : this.progress ? 'orange' : ''
+            },
+          },
+          get textButton() {
+            return this.read.progress ? 'Страницы' : this.audio.progress ? 'Минуты' : false
+          },
+        }
+      }
+    },
   },
   actions: {
     // Добавление нового события начала чтения/прослушивания.
@@ -360,6 +443,30 @@ export const useProgressStore = defineStore('progress', {
           break
         default:
           throw new Error('В хранилище <ProgressStore> найдены несколько записей у одной книги.')
+      }
+    },
+    /**
+     * Добавляет запись о прогрессе в изучении книги.
+     * @param {String} isbn ISBN книги.
+     * @param {String} dateStart Дата начала события.
+     * @param {String} dateStop Дата окончания события.
+     * @param {Number} count Количество минут/страниц.
+     */
+    addNewProgress(isbn, dateStart, dateStop, count) {
+      const bookStore = useBooksStore()
+      const event = this.getLastEventByISBN(isbn)
+
+      if (event) {
+        // Добавляем информацию о событии.
+        event.progress.push({
+          dateStart,
+          dateStop,
+          count,
+        })
+        // Обновляем bookStore И проверяем не закончилась ли книга.
+        if (bookStore.updateCount(isbn, count, dateStop)) {
+          event.isEnd = true
+        }
       }
     },
   },
