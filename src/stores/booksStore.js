@@ -572,5 +572,29 @@ export const useBooksStore = defineStore('books', {
 
       book.opinion = text
     },
+    /**
+     * Добавляет новую книгу в хранилище.
+     * @param {Object} book Данные о книге.
+     */
+    addNewBook(book) {
+      this.listOfBooks.push({
+        bookSeries: book.serie,
+        title: book.name,
+        author: book.author,
+        isbn: String(book.isbn),
+        pages: book.pages,
+        audioDuration: book.audio,
+        cover: '',
+        dateAdd: getLocalISOString(),
+        dateStart: '',
+        dateEnd: '',
+        status: false,
+        pagesRead: 0,
+        totalListened: 0,
+        isComplete: false,
+        description: `<p>${book.descr.split('\n').join('</p><p>')}</p>`,
+        opinion: '',
+      })
+    },
   },
 })

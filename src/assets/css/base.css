@@ -80,7 +80,8 @@ select {
   padding: var(--ident-quarter);
 }
 
-input {
+input,
+textarea {
   border: 1px solid var(--blue);
   padding: var(--ident-quarter);
 }
@@ -94,9 +95,4 @@ dialog {
     background-color: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(2px);
   }
-}
-
-textarea {
-  box-sizing: border-box;
-  padding: var(--ident-half);
 }

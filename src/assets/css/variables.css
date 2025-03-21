@@ -20,6 +20,7 @@
   --ident: 1rem;
   --ident-half: calc(var(--ident) / 2);
   --ident-quarter: calc(var(--ident) / 4);
+  --ident-and-quarter: calc(var(--ident) + var(--ident-quarter));
   --ident-and-half: calc(var(--ident) + var(--ident-half));
   --ident-double: calc(var(--ident) * 2);
 
