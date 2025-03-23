@@ -185,18 +185,18 @@ export const useProgressStore = defineStore('progress', {
             isEnd: true,
             progress: [
               {
-                dateStart: '2023-12-18T20:58:16+0300',
-                dateStop: '2023-12-19T00:03:16+0300',
+                dateStart: '2024-09-18T20:58:16+0300',
+                dateStop: '2024-09-19T00:03:16+0300',
                 count: 144,
               },
               {
-                dateStart: '2023-12-19T20:03:16+0300',
-                dateStop: '2023-12-19T23:18:16+0300',
+                dateStart: '2024-09-19T20:03:16+0300',
+                dateStop: '2024-09-19T23:18:16+0300',
                 count: 140,
               },
               {
-                dateStart: '2023-12-20T20:48:16+0300',
-                dateStop: '2023-12-20T23:56:16+0300',
+                dateStart: '2024-09-20T20:48:16+0300',
+                dateStop: '2024-09-20T23:56:16+0300',
                 count: 100,
               },
             ],
@@ -409,6 +409,76 @@ export const useProgressStore = defineStore('progress', {
             return this.read.progress ? 'Страницы' : this.audio.progress ? 'Минуты' : false
           },
         }
+      }
+    },
+    /**
+     * Возвращает информацию о прочитанных книгах.
+     * @returns {Object} Общее количество, прочитано, прослушано, массив с событиями.
+     */
+    getFinishedBooks(state) {
+      const result = []
+      let events
+      let read = 0
+      let audio = 0
+
+      state.progressList.forEach((item) => {
+        events = []
+
+        item.list.forEach((event) => {
+          if (event.isEnd) {
+            if (event.type === 'read') read++
+            if (event.type === 'audio') audio++
+
+            events.push(event)
+          }
+        })
+
+        if (events.length)
+          result.push({
+            isbn: item.isbn,
+            list: events,
+          })
+      })
+
+      return {
+        count: read + audio,
+        read,
+        audio,
+        data: result,
+      }
+    },
+    /**
+     * Возвращает информацию о прочитанных книгах по месяцам за указанный год.
+     * @param {Number} year Год.
+     * @returns {Array} Разбивка по месяцам аудио+прочитано.
+     */
+    getFinishedBooksPerMonthInYear: (state) => {
+      return (year) => {
+        const result = {
+          read: 0,
+          audio: 0,
+          months: [],
+        }
+
+        for (let i = 0; i < 12; i++) {
+          const month = { read: 0, audio: 0 }
+
+          state.getFinishedBooks.data.forEach((item) => {
+            item.list.forEach((event) => {
+              const dateStop = new Date(event.progress.at(-1).dateStop)
+              if (dateStop.getMonth() === i && dateStop.getFullYear() === year) {
+                if (event.type === 'read') month.read++
+                if (event.type === 'audio') month.audio++
+              }
+            })
+          })
+
+          result.read += month.read
+          result.audio += month.audio
+          result.months.push(month)
+        }
+
+        return result
       }
     },
   },

@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 // Store
 import { useBooksStore } from '@/stores/booksStore'
 // Components
@@ -7,10 +7,7 @@ import TheButton from '@/components/TheButton.vue'
 import BookCard from '@/components/BookCard.vue'
 
 const booksStore = useBooksStore()
-// Всего книг на полке.
-const booksCount = ref(0)
-// Счётчики прочитанных книг.
-const booksCompleteCount = ref([])
+
 // Список книг.
 const books = ref([])
 // Значения для запроса списка книг.
@@ -19,12 +16,11 @@ const dataForLoad = ref({
   end: 6,
   count: 6,
 })
+// Всего книг на полке.
+const booksCount = computed(() => booksStore.getBooksCount)
 
 // Смонтировано.
 onMounted(() => {
-  booksCount.value = booksStore.getBooksCount
-  booksCompleteCount.value = booksStore.getBooksCompleteCount()
-
   loadMoreBooks()
 })
 /**
@@ -51,7 +47,6 @@ const changeStatus = ({ isbn, idStatus }) => {
     <div class="bookshelf__info">
       <div class="bookshelf__info-wrapper">
         <span class="bookshelf__info-item">Всего книг на полке: {{ booksCount }}</span>
-        <span class="bookshelf__info-item">Из них прочитано: {{ booksCompleteCount.all }}</span>
         <span class="bookshelf__info-item">Показано книг: {{ books.length }}</span>
       </div>
       <TheButton icon="Plus" text="Добавить книгу" color="blue" link="/bookstore" />

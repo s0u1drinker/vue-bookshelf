@@ -5,19 +5,18 @@ import { RouterLink } from 'vue-router'
 import { months, yearsForSelect } from '@/helpers/constants'
 // Store
 import { useBooksStore } from '@/stores/booksStore'
+import { useProgressStore } from '@/stores/progressStore'
 import { useRatingsStore } from '@/stores/ratingsStore'
 // Components
 import StatBlock from '@/components/StatBlock.vue'
 import TheSelect from '@/components/TheSelect.vue'
 import TheButton from '@/components/TheButton.vue'
+import ChartForTheYear from '@/components/ChartForTheYear.vue'
 
 const booksStore = useBooksStore()
+const progressStore = useProgressStore()
 const ratingsStore = useRatingsStore()
 
-// Всего книг на полке.
-const booksCount = ref(0)
-// Счётчики прочитанных книг.
-const booksCompleteCount = ref([])
 // Счётчики прочитанных книг за выбранный период.
 const booksCompleteCountAtUserPeriod = ref([])
 // Выбранный пользователем месяц.
@@ -26,16 +25,14 @@ const userSelectedMonth = ref(null)
 const userSelectedYear = ref(null)
 // Заголовок блока, в котором пользователь выбирает период.
 const userBlockTitle = ref('')
-// Рейтинг в блоке, в котором аользователь выбирает перриод.
+// Рейтинг в блоке, в котором пользователь выбирает перриод.
 const userBlockRating = ref(0)
-// Процент завершенных книг.
-const completePercent = computed(() => {
-  return Math.round((booksCompleteCount.value.all * 100) / booksCount.value)
-})
+// Всего книг на полке.
+const booksCount = computed(() => booksStore.getBooksCount)
+// Счётчики прочитанных книг.
+const booksCompleteCount = computed(() => progressStore.getFinishedBooks)
 // Смонтировано.
 onMounted(() => {
-  booksCount.value = booksStore.getBooksCount
-  booksCompleteCount.value = booksStore.getBooksCompleteCount()
   showSelectedPeriodData()
 })
 // Показывает статистику по книгам за выбранный период.
@@ -65,7 +62,7 @@ const showSelectedPeriodData = () => {
     <StatBlock title="Все книги">
       <ul>
         <li>На полке: {{ booksCount }}</li>
-        <li>Закончено: {{ `${booksCompleteCount.all} (${completePercent}%)` }}</li>
+        <li>Прочитано/прослушано раз: {{ booksCompleteCount.count }}</li>
         <li>Из них:</li>
         <li>- прочитано: {{ booksCompleteCount.read }}</li>
         <li>- прослушано: {{ booksCompleteCount.audio }}</li>
@@ -121,6 +118,7 @@ const showSelectedPeriodData = () => {
       </StatBlock>
     </div>
   </div>
+  <ChartForTheYear />
 </template>
 
 <style scoped>
