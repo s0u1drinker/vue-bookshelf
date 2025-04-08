@@ -29,46 +29,7 @@ export const useRatingsStore = defineStore('ratings', {
       { value: 2, label: 2 },
       { value: 1, label: 1 },
     ],
-    ratings: [
-      {
-        bookISBN: '9785918780381',
-        appearance: 10,
-        plot: 10,
-        atmosphere: 10,
-        involvement: 10,
-        emotions: 10,
-        summary: 10,
-      },
-      {
-        bookISBN: '9785918780374',
-        appearance: 10,
-        plot: 10,
-        atmosphere: 10,
-        involvement: 10,
-        emotions: 10,
-        summary: 10,
-      },
-      {
-        bookISBN: '9785907577503',
-        appearance: 8,
-        plot: 9,
-        atmosphere: 10,
-        involvement: 9,
-        emotions: 10,
-        summary: 9.2,
-      },
-      /*
-      {
-        bookISBN: '',
-        appearance: 0,
-        plot: 0,
-        atmosphere: 0,
-        involvement: 0,
-        emotions: 0,
-        summary: 0,
-      },
-      */
-    ],
+    ratings: [],
   }),
   getters: {
     /**
@@ -156,8 +117,13 @@ export const useRatingsStore = defineStore('ratings', {
     },
   },
   actions: {
+    // Добавление рейтинга.
     addNewRating(isbn, ratingTemplate) {
       this.ratings.push({ bookISBN: isbn, ...ratingTemplate })
+    },
+    // Обновление данных о рейтингах.
+    updateRating(newVal) {
+      this.ratings = newVal
     },
   },
 })

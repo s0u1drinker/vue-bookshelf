@@ -1,3 +1,6 @@
+// Адрес API-сервера.
+export const api = 'http://localhost:3000/api/v1/'
+
 // Список месяцев для компонента select.
 export const months = [
   { value: 0, label: 'Январь' },
